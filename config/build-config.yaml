@@ -1,0 +1,7 @@
+recipes:
+  - name: onnxruntime
+    path : recipe
+
+channels:
+  - defaults
+  - conda-forge
