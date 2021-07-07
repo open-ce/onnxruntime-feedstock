@@ -43,24 +43,24 @@ requirements:
     - python {{ python }}
     - pip
     - wheel
-    - boost_mp11
+    - boost_mp11 {{ boost_mp11 }}
     - flake8
     - flatbuffers
-    - gmock
-    - gtest
-    - libdate
-    - python-flatbuffers
+    - gmock {{ gmock }}
+    - gtest {{ gtest }}
+    - libdate {{ libdate }}
+    - python-flatbuffers 
     - re2
-    - optional-lite
+    - optional-lite {{ optional_lite }}
     - nsync
-    - nlohmann_json
+    - nlohmann_json {{ nlohmann_json }}
     - libprotobuf
     # We need to statically link protobuf until we link against a system libonnx
     # See: https://github.com/conda-forge/onnxruntime-feedstock/issues/5
     - libprotobuf-static
     - numpy {{ numpy }}
     - pybind11
-    - safeint
+    - safeint {{ safeint }}
     # Use pins to control cos6/cos7 match
     - libgcc-ng  {{ libgcc }}
     - libstdcxx-ng  {{ libstdcxx }}
