@@ -5,4 +5,5 @@ cxx_compiler_version:
   - 7.2.0                      # [x86_64]
   - 7.3.0                      # [ppc64le]
 cmake:
-  - 3.18.*
+  - 3.18.*                     # [x86_64]
+  - 3.19.*                     # [ppc64le]
