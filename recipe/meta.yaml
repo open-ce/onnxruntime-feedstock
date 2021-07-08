@@ -47,7 +47,7 @@ requirements:
     - flake8
     - flatbuffers
     - gmock {{ gmock }}
-    - gtest {{ gtest }}
+    - gtest {{ gmock }}
     - libdate {{ libdate }}
     - python-flatbuffers 
     - re2
