@@ -37,9 +37,11 @@ popd
 CUDA_ARGS=""
 if [[ $build_type == "cuda" ]]
 then
-  CUDA_ARGS=" --use_cuda "
-  export CUDNN_HOME=$PREFIX  
+  export CUDNN_HOME=$PREFIX
+  CUDA_ARGS=" --use_cuda --cmake_extra_defines CMAKE_CUDA_COMPILER=${CUDA_HOME}/bin/nvcc CMAKE_CUDA_HOST_COMPILER=${CXX}"
 fi
+
+export CUDACXX=$CUDA_HOME/bin/nvcc
 
 python tools/ci_build/build.py \
     --enable_lto \
