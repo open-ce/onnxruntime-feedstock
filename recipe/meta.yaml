@@ -21,6 +21,13 @@ source:
 
 build:
   number: 1
+  string: h{{ PKG_HASH }}_{{ build_type }}_py{{ python | replace(".", "") }}_pb{{ protobuf | replace(".*", "")}}_{{ PKG_BUILDNUM }}   #[build_type == 'cpu']
+  string: h{{ PKG_HASH }}_{{ build_type }}{{ cudatoolkit | replace(".*", "") }}_py{{ python | replace(".", "") }}_pb{{ protobuf | replace(".*", "")}}_{{ PKG_BUILDNUM }} #[build_type == 'cuda']
+  {% if build_type == 'cuda' %}
+  script_env:
+    - CUDA_HOME
+  {% endif %}
+
   ignore_run_exports:
     - libgcc-ng
     - libstdcxx-ng
@@ -64,10 +71,18 @@ requirements:
     # Use pins to control cos6/cos7 match
     - libgcc-ng  {{ libgcc }}
     - libstdcxx-ng  {{ libstdcxx }}
+    {% if build_type == 'cuda' %}
+    - cudatoolkit {{ cudatoolkit }}
+    - cudnn {{ cudnn }}
+    {% endif %}
   run:
     - python {{ python }}
     - {{ pin_compatible('numpy') }}
     - protobuf
+    {% if build_type == 'cuda' %}
+    - cudatoolkit {{ cudatoolkit }}
+    - cudnn {{ cudnn }}
+    {% endif %}
 
 test:
   imports:
@@ -78,12 +93,16 @@ test:
     - pip
 
 about:
-  home: https://github.com/microsoft/onnxruntime/
+  home: http://onnxruntime.ai/
   summary: cross-platform, high performance ML inferencing and training accelerator
   license: MIT
   license_file:
     - LICENSE
     - cmake/external/onnx/LICENSE
+  description: |
+    ONNX Runtime is a cross-platform inference and training machine-learning accelerator.
+  dev_url: https://github.com/microsoft/onnxruntime/
+  doc_url: https://github.com/microsoft/onnxruntime/tree/master/docs
 
 extra:
   recipe-maintainers:
