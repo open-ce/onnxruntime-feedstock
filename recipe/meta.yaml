@@ -18,6 +18,12 @@ source:
   - url: https://gitlab.com/libeigen/eigen/-/archive/d10b27fe37736d2944630ecd7557cefa95cf87c9/eigen-d10b27fe37736d2944630ecd7557cefa95cf87c9.tar.gz
     sha256: a3c10a8c14f55e9f09f98b0a0ac6874c21bda91f65b7469d9b1f6925990e867b
     folder: eigen
+  - url: https://github.com/NVlabs/cub/archive/c3cceac115c072fb63df1836ff46d8c60d9eb304.zip
+    sha256: 8894c68d7549681591c34078dcd40cf34459b6c7d33407f07e2145d2adb683ee 
+    folder: cub
+  - url: https://github.com/onnx/onnx-tensorrt/archive/3e1264751bc4256f648cda4da74a3d190a5dd3c2.zip
+    sha256: b92f7cfbfe743dbbf926fe0ee353b4d2d62a5047cd3a749b637d10f4231cc015
+    folder: onnx-tensorrt
 
 build:
   number: 1
@@ -27,10 +33,6 @@ build:
   script_env:
     - CUDA_HOME
   {% endif %}
-
-  ignore_run_exports:
-    - libgcc-ng
-    - libstdcxx-ng
 
 requirements:
   build:
@@ -74,6 +76,7 @@ requirements:
     {% if build_type == 'cuda' %}
     - cudatoolkit {{ cudatoolkit }}
     - cudnn {{ cudnn }}
+    - tensorrt {{ tensorrt }}   #[py<38]
     {% endif %}
   run:
     - python {{ python }}
@@ -82,6 +85,7 @@ requirements:
     {% if build_type == 'cuda' %}
     - cudatoolkit {{ cudatoolkit }}
     - cudnn {{ cudnn }}
+    - tensorrt {{ tensorrt }}   #[py<38]
     {% endif %}
 
 test:
