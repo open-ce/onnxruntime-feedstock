@@ -51,6 +51,7 @@ then
 fi
 
 export CUDACXX=$CUDA_HOME/bin/nvcc
+export LDFLAGS="${LDFLAGS} -L${PREFIX}/lib"
 
 python tools/ci_build/build.py \
     --enable_lto \
@@ -58,9 +59,10 @@ python tools/ci_build/build.py \
     --use_full_protobuf \
     ${CUDA_ARGS} \
     ${TRT_FLAG} \
-    --cmake_extra_defines ${CMAKE_CUDA_EXTRA_DEFINES} Protobuf_PROTOC_EXECUTABLE=$BUILD_PREFIX/bin/protoc Protobuf_INCLUDE_DIR=$PREFIX/include "onnxruntime_PREFER_SYSTEM_LIB=ON" onnxruntime_USE_COREML=OFF CMAKE_PREFIX_PATH=$PREFIX CMAKE_INSTALL_PREFIX=$PREFIX \
+    --cmake_extra_defines ${CMAKE_CUDA_EXTRA_DEFINES} Protobuf_PROTOC_EXECUTABLE=$BUILD_PREFIX/bin/protoc Protobuf_INCLUDE_DIR=$PREFIX/include "onnxruntime_PREFER_SYSTEM_LIB=ON" onnxruntime_USE_COREML=OFF CMAKE_PREFIX_PATH=$PREFIX CMAKE_INSTALL_PREFIX=$PREFIX ONNXRUNTIME_VERSION=$(cat ./VERSION_NUMBER) \
     --cmake_generator Ninja \
     --build_wheel \
+    --build_shared_lib \
     --config Release \
     --update \
     --build \

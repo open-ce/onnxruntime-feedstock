@@ -37,7 +37,7 @@ build:
 requirements:
   build:
     - python {{ python }}                    # [build_platform != target_platform]
-#    - cross-python_{{ target_platform }}     # [build_platform != target_platform]
+    - cross-python_{{ target_platform }}     # [build_platform != target_platform]
     - numpy {{ numpy }}                      # [build_platform != target_platform]
     - pybind11                               # [build_platform != target_platform]
     - {{ compiler('c') }}
@@ -76,7 +76,7 @@ requirements:
     {% if build_type == 'cuda' %}
     - cudatoolkit {{ cudatoolkit }}
     - cudnn {{ cudnn }}
-    - tensorrt {{ tensorrt }}   #[py<38]
+      #    - tensorrt {{ tensorrt }}   #[py<38]
     {% endif %}
   run:
     - python {{ python }}
@@ -85,7 +85,7 @@ requirements:
     {% if build_type == 'cuda' %}
     - cudatoolkit {{ cudatoolkit }}
     - cudnn {{ cudnn }}
-    - tensorrt {{ tensorrt }}   #[py<38]
+      #    - tensorrt {{ tensorrt }}   #[py<38]
     {% endif %}
 
 test:
