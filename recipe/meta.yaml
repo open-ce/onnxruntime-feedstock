@@ -75,12 +75,16 @@ test:
     - pip
 
 about:
-  home: https://github.com/microsoft/onnxruntime/
+  home: http://onnxruntime.ai/
   summary: cross-platform, high performance ML inferencing and training accelerator
   license: MIT
   license_file:
     - LICENSE
     - cmake/external/onnx/LICENSE
+  description: |
+    ONNX Runtime is a cross-platform inference and training machine-learning accelerator.
+  dev_url: https://github.com/microsoft/onnxruntime/
+  doc_url: https://github.com/microsoft/onnxruntime/tree/master/docs
 
 extra:
   recipe-maintainers:

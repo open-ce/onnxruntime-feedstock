@@ -34,11 +34,13 @@ popd
 # ln -s $PREFIX/include/eigen3 eigen
 # popd
 
+export LDFLAGS="${LDFLAGS} -L${PREFIX}/lib"
+
 python tools/ci_build/build.py \
     --enable_lto \
     --build_dir build-ci \
     --use_full_protobuf \
-    --cmake_extra_defines Protobuf_PROTOC_EXECUTABLE=$BUILD_PREFIX/bin/protoc Protobuf_INCLUDE_DIR=$PREFIX/include "onnxruntime_PREFER_SYSTEM_LIB=ON" onnxruntime_USE_COREML=OFF CMAKE_PREFIX_PATH=$PREFIX CMAKE_INSTALL_PREFIX=$PREFIX \
+    --cmake_extra_defines Protobuf_PROTOC_EXECUTABLE=$BUILD_PREFIX/bin/protoc Protobuf_INCLUDE_DIR=$PREFIX/include "onnxruntime_PREFER_SYSTEM_LIB=ON" onnxruntime_USE_COREML=OFF CMAKE_PREFIX_PATH=$PREFIX CMAKE_INSTALL_PREFIX=$PREFIX ONNXRUNTIME_VERSION=$(cat ./VERSION_NUMBER) \
     --cmake_generator Ninja \
     --build_wheel \
     --config Release \
