@@ -11,6 +11,7 @@ source:
     sha256: ef0135c49922d854b2d1ccac3759d7baf895df537c5f15386ce49fe2430ac688
     patches:
       - 0001-Use-more-system-libraries.patch
+      - 0001-Fixed-build-with-gcc-7.patch
   - url: https://github.com/onnx/onnx/archive/971632833036c576cf95499291f689f8bb3519e1.zip
     sha256: 340999131688d6ab7a7939df587057cc9e49d326fc112ff65b58e121a0afad92
     folder: onnx
@@ -19,46 +20,51 @@ source:
     folder: eigen
 
 build:
-  number: 3
-  skip: true  # [win]
+  number: 1
 
 requirements:
   build:
-    - python                                 # [build_platform != target_platform]
+    - python {{ python }}                    # [build_platform != target_platform]
     - cross-python_{{ target_platform }}     # [build_platform != target_platform]
-    - numpy                                  # [build_platform != target_platform]
+    - numpy {{ numpy }}                      # [build_platform != target_platform]
     - pybind11                               # [build_platform != target_platform]
     - {{ compiler('c') }}
     - {{ compiler('cxx') }}
-    - cmake
-    - ninja
-    - libprotobuf
+    - cmake {{ cmake }}
+    - ninja {{ ninja }}
+    - libprotobuf {{ protobuf }}
+    # Use pins to control cos6/cos7 match
+    - libgcc-ng  {{ libgcc }}
+    - libstdcxx-ng  {{ libstdcxx }}
   host:
-    - python
+    - python {{ python }}
     - pip
     - wheel
-    - boost_mp11
+    - boost_mp11 {{ boost_mp11 }}
     - flake8
     - flatbuffers
-    - gmock
-    - gtest
-    - libdate
-    - python-flatbuffers
+    - gmock {{ gmock }}
+    - gtest {{ gmock }}
+    - libdate {{ libdate }}
+    - python-flatbuffers 
     - re2
-    - optional-lite
+    - optional-lite {{ optional_lite }}
     - nsync
-    - nlohmann_json
-    - libprotobuf
+    - nlohmann_json {{ nlohmann_json }}
+    - libprotobuf {{ protobuf }}
     # We need to statically link protobuf until we link against a system libonnx
     # See: https://github.com/conda-forge/onnxruntime-feedstock/issues/5
-    - libprotobuf-static
-    - numpy
+    - libprotobuf-static {{ protobuf }}
+    - numpy {{ numpy }}
     - pybind11
-    - safeint
+    - safeint {{ safeint }}
+    # Use pins to control cos6/cos7 match
+    - libgcc-ng  {{ libgcc }}
+    - libstdcxx-ng  {{ libstdcxx }}
   run:
-    - python
+    - python {{ python }}
     - {{ pin_compatible('numpy') }}
-    - protobuf
+    - protobuf {{ protobuf }}
 
 test:
   imports:
@@ -69,13 +75,17 @@ test:
     - pip
 
 about:
-  home: https://github.com/microsoft/onnxruntime/
+  home: http://onnxruntime.ai/
   summary: cross-platform, high performance ML inferencing and training accelerator
   license: MIT
   license_file:
     - LICENSE
     - cmake/external/onnx/LICENSE
+  description: |
+    ONNX Runtime is a cross-platform inference and training machine-learning accelerator.
+  dev_url: https://github.com/microsoft/onnxruntime/
+  doc_url: https://github.com/microsoft/onnxruntime/tree/master/docs
 
 extra:
   recipe-maintainers:
-    - xhochy
+    - open-ce/open-ce-dev-team
