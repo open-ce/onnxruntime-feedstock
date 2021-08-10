@@ -1,0 +1,33 @@
+From 3d033097c13af14d51327e900587a348786fa43a Mon Sep 17 00:00:00 2001
+From: Nishidha Panpaliya <npanpa23@in.ibm.com>
+Date: Mon, 9 Aug 2021 04:07:30 -0400
+Subject: [PATCH] Add cmake changes to link against libmemcpy wrapper
+
+---
+ cmake/CMakeLists.txt | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
+
+diff --git a/cmake/CMakeLists.txt b/cmake/CMakeLists.txt
+index a07893771..66f93715f 100644
+--- a/cmake/CMakeLists.txt
++++ b/cmake/CMakeLists.txt
+@@ -710,6 +710,7 @@ if(onnxruntime_USE_CUDA)
+         list(APPEND onnxruntime_LINK_DIRS ${onnxruntime_CUDNN_HOME}/lib/x64 ${onnxruntime_CUDA_HOME}/x64/lib64)
+       else()
+         list(APPEND onnxruntime_LINK_DIRS ${onnxruntime_CUDNN_HOME}/lib64 ${onnxruntime_CUDA_HOME}/lib64)
++        list(APPEND onnxruntime_LINK_DIRS "$ENV{PREFIX}/lib" )
+       endif()
+ endif()
+ 
+@@ -1176,7 +1177,7 @@ if (onnxruntime_USE_CUDA)
+   if (onnxruntime_ENABLE_NVTX_PROFILE)
+     list(APPEND ONNXRUNTIME_CUDA_LIBRARIES cublas cudnn curand cufft nvToolsExt)
+   else()
+-    list(APPEND ONNXRUNTIME_CUDA_LIBRARIES cublas cudnn curand cufft)
++    list(APPEND ONNXRUNTIME_CUDA_LIBRARIES cublas cudnn curand cufft memcpy-2.14)
+   endif()
+ 
+   list(APPEND onnxruntime_EXTERNAL_LIBRARIES ${ONNXRUNTIME_CUDA_LIBRARIES})
+-- 
+2.23.0
+
