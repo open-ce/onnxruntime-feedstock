@@ -17,8 +17,8 @@
 
 set -ex
 
-rm -r cmake/external/onnx cmake/external/eigen cmake/external/cub cmake/external/onnx-tensorrt
-mv onnx eigen cub onnx-tensorrt cmake/external/
+rm -r cmake/external/onnx cmake/external/eigen cmake/external/cub
+mv onnx eigen cub cmake/external/
 
 pushd cmake/external/SafeInt/safeint
 ln -s $PREFIX/include/SafeInt.hpp
@@ -41,13 +41,22 @@ if [[ $build_type == "cuda" ]]
 then
   export CUDNN_HOME=$PREFIX
   CUDA_ARGS=" --use_cuda --cuda_home ${CUDA_HOME} --cudnn_home ${PREFIX} "
-  CMAKE_CUDA_EXTRA_DEFINES="CMAKE_CUDA_COMPILER=${CUDA_HOME}/bin/nvcc CMAKE_CUDA_HOST_COMPILER=${CXX} CMAKE_CUDA_ARCHITECTURES=37;50;52;60;70 CMAKE_AR=${GCC_AR} CMAKE_RANLIB=${GCC_RANLIB} CMAKE_NM=${GCC_NM}"
-fi
+  CMAKE_CUDA_EXTRA_DEFINES="CMAKE_CUDA_COMPILER=${CUDA_HOME}/bin/nvcc CMAKE_CUDA_HOST_COMPILER=${CXX} CMAKE_AR=${GCC_AR} CMAKE_RANLIB=${GCC_RANLIB} CMAKE_NM=${GCC_NM}"
 
-TRT_FLAG=""
-if [[ $PY_VER > 3.8 ]];
-then
-  TRT_FLAG=" --use_tensorrt --tensorrt_home $PREFIX"
+  ARCH=`uname -p`
+  if [[ "${ARCH}" == 'x86_64' ]]; then
+    CUDA_ARCH='37;52;60;61;70;75'
+  fi
+  if [[ "${ARCH}" == 'ppc64le' ]]; then
+    ## M40 and P4 never fully qualified on ppc64le
+    CUDA_ARCH='37;60;70;75'
+  fi
+
+  CUDA_VERSION="${cudatoolkit%.*}"
+  if [[ $CUDA_VERSION == '11' ]]; then
+    CUDA_ARCH+=';80'
+  fi
+  CMAKE_CUDA_EXTRA_DEFINES+=" CMAKE_CUDA_ARCHITECTURES=${CUDA_ARCH} "
 fi
 
 export CUDACXX=$CUDA_HOME/bin/nvcc
