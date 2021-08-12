@@ -45,16 +45,16 @@ then
 
   ARCH=`uname -p`
   if [[ "${ARCH}" == 'x86_64' ]]; then
-    CUDA_ARCH='37;52;60;61;70;75'
+    CUDA_ARCH='37;52;60;61;70'
   fi
   if [[ "${ARCH}" == 'ppc64le' ]]; then
     ## M40 and P4 never fully qualified on ppc64le
-    CUDA_ARCH='37;60;70;75'
+    CUDA_ARCH='37;60;70'
   fi
 
   CUDA_VERSION="${cudatoolkit%.*}"
   if [[ $CUDA_VERSION == '11' ]]; then
-    CUDA_ARCH+=';80'
+    CUDA_ARCH+=';75;80'
   fi
   CMAKE_CUDA_EXTRA_DEFINES+=" CMAKE_CUDA_ARCHITECTURES=${CUDA_ARCH} "
 fi
