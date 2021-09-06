@@ -60,7 +60,7 @@ then
 fi
 
 export CUDACXX=$CUDA_HOME/bin/nvcc
-export LDFLAGS="${LDFLAGS} -L${PREFIX}/lib"
+export LDFLAGS="${LDFLAGS} -L${PREFIX}/lib -lre2 "
 
 python tools/ci_build/build.py \
     --enable_lto \
