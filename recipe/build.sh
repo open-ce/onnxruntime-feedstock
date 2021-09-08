@@ -42,21 +42,10 @@ then
   export CUDNN_HOME=$PREFIX
   CUDA_ARGS=" --use_cuda --cuda_home ${CUDA_HOME} --cudnn_home ${PREFIX} "
   CMAKE_CUDA_EXTRA_DEFINES="CMAKE_CUDA_COMPILER=${CUDA_HOME}/bin/nvcc CMAKE_CUDA_HOST_COMPILER=${CXX} CMAKE_AR=${GCC_AR} CMAKE_RANLIB=${GCC_RANLIB} CMAKE_NM=${GCC_NM}"
-
-  ARCH=`uname -p`
-  if [[ "${ARCH}" == 'x86_64' ]]; then
-    CUDA_ARCH='37;52;60;61;70'
-  fi
-  if [[ "${ARCH}" == 'ppc64le' ]]; then
-    ## M40 and P4 never fully qualified on ppc64le
-    CUDA_ARCH='37;60;70'
-  fi
-
-  CUDA_VERSION="${cudatoolkit%.*}"
-  if [[ $CUDA_VERSION == '11' ]]; then
-    CUDA_ARCH+=';75;80'
-  fi
-  CMAKE_CUDA_EXTRA_DEFINES+=" CMAKE_CUDA_ARCHITECTURES=${CUDA_ARCH} "
+  ONNX_CUDA_ARCH="${cuda_levels//,/;}"
+  ONNX_CUDA_ARCH="${ONNX_CUDA_ARCH//./}"
+  echo "$ONNX_CUDA_ARCH"
+  CMAKE_CUDA_EXTRA_DEFINES+=" CMAKE_CUDA_ARCHITECTURES=${ONNX_CUDA_ARCH} "
 fi
 
 export CUDACXX=$CUDA_HOME/bin/nvcc
