@@ -73,7 +73,6 @@ requirements:
     - python {{ python }}
     - {{ pin_compatible('numpy') }}
     - protobuf {{ protobuf }}
-    - protobuf
     {% if build_type == 'cuda' %}
     - cudatoolkit {{ cudatoolkit }}
     - cudnn {{ cudnn }}
