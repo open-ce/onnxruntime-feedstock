@@ -42,9 +42,15 @@ then
   export CUDNN_HOME=$PREFIX
   CUDA_ARGS=" --use_cuda --cuda_home ${CUDA_HOME} --cudnn_home ${PREFIX} "
   CMAKE_CUDA_EXTRA_DEFINES="CMAKE_CUDA_COMPILER=${CUDA_HOME}/bin/nvcc CMAKE_CUDA_HOST_COMPILER=${CXX} CMAKE_AR=${GCC_AR} CMAKE_RANLIB=${GCC_RANLIB} CMAKE_NM=${GCC_NM}"
+
   ONNX_CUDA_ARCH="${cuda_levels//,/;}"
   ONNX_CUDA_ARCH="${ONNX_CUDA_ARCH//./}"
-  echo "$ONNX_CUDA_ARCH"
+
+  CUDA_VERSION="${cudatoolkit%.*}"
+  if [[ $CUDA_VERSION == '10' ]]; then
+    ONNX_CUDA_ARCH="${ONNX_CUDA_ARCH//;75/}"     # Onnxruntime fails with cudatoolkit 10.2 with cuda compute 75
+  fi
+  echo $ONNX_CUDA_ARCH
   CMAKE_CUDA_EXTRA_DEFINES+=" CMAKE_CUDA_ARCHITECTURES=${ONNX_CUDA_ARCH} "
 fi
 
