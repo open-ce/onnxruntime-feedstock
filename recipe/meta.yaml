@@ -46,35 +46,36 @@ requirements:
     # Use pins to control cos6/cos7 match
     - libgcc-ng  {{ libgcc }}         # [x86_64 and c_compiler_version == "7.2.*"]
     - libstdcxx-ng  {{ libstdcxx }}   # [x86_64 and c_compiler_version == "7.2.*"]
+    - boost_mp11 {{ boost_mp11 }}
+    - gmock {{ gmock }}
+    - gtest {{ gmock }}
+    - optional-lite {{ optional_lite }}
+    - nlohmann_json {{ nlohmann_json }}
+    - safeint {{ safeint }}
+    - libdate {{ libdate }}
+    {% if build_type == 'cuda' %}
+    - cudatoolkit {{ cudatoolkit }}
+    - cudnn {{ cudnn }}
+    {% endif %}
+
   host:
     - python {{ python }}
     - pip
     - wheel
-    - boost_mp11 {{ boost_mp11 }}
     - flake8
     - flatbuffers
-    - gmock {{ gmock }}
-    - gtest {{ gmock }}
-    - libdate {{ libdate }}
     - python-flatbuffers 
     - re2
-    - optional-lite {{ optional_lite }}
     - nsync
-    - nlohmann_json {{ nlohmann_json }}
     - libprotobuf {{ protobuf }}
     # We need to statically link protobuf until we link against a system libonnx
     # See: https://github.com/conda-forge/onnxruntime-feedstock/issues/5
     - libprotobuf-static {{ protobuf }}
     - numpy {{ numpy }}
     - pybind11
-    - safeint {{ safeint }}
     # Use pins to control cos6/cos7 match
     - libgcc-ng  {{ libgcc }}         # [x86_64 and c_compiler_version == "7.2.*"]
     - libstdcxx-ng  {{ libstdcxx }}   # [x86_64 and c_compiler_version == "7.2.*"]
-    {% if build_type == 'cuda' %}
-    - cudatoolkit {{ cudatoolkit }}
-    - cudnn {{ cudnn }}
-    {% endif %}
   run:
     - python {{ python }}
     - {{ pin_compatible('numpy') }}

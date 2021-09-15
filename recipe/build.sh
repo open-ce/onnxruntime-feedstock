@@ -21,11 +21,11 @@ rm -r cmake/external/onnx cmake/external/eigen cmake/external/cub
 mv onnx eigen cub cmake/external/
 
 pushd cmake/external/SafeInt/safeint
-ln -s $PREFIX/include/SafeInt.hpp
+ln -s $BUILD_PREFIX/include/SafeInt.hpp
 popd
 
 pushd cmake/external/json
-ln -s $PREFIX/include single_include
+ln -s $BUILD_PREFIX/include single_include
 popd
 
 
@@ -39,8 +39,8 @@ CUDA_ARGS=""
 CMAKE_CUDA_EXTRA_DEFINES=""
 if [[ $build_type == "cuda" ]]
 then
-  export CUDNN_HOME=$PREFIX
-  CUDA_ARGS=" --use_cuda --cuda_home ${CUDA_HOME} --cudnn_home ${PREFIX} "
+  export CUDNN_HOME=$BUILD_PREFIX
+  CUDA_ARGS=" --use_cuda --cuda_home ${CUDA_HOME} --cudnn_home ${BUILD_PREFIX} "
   CMAKE_CUDA_EXTRA_DEFINES="CMAKE_CUDA_COMPILER=${CUDA_HOME}/bin/nvcc CMAKE_CUDA_HOST_COMPILER=${CXX} CMAKE_AR=${GCC_AR} CMAKE_RANLIB=${GCC_RANLIB} CMAKE_NM=${GCC_NM}"
 
   ONNX_CUDA_ARCH="${cuda_levels//,/;}"
@@ -55,7 +55,7 @@ then
 fi
 
 export CUDACXX=$CUDA_HOME/bin/nvcc
-export LDFLAGS="${LDFLAGS} -L${PREFIX}/lib -lre2 "
+export LDFLAGS="${LDFLAGS} -L${PREFIX}/lib -L${BUILD_PREFIX}/lib -lre2 "
 
 python tools/ci_build/build.py \
     --enable_lto \
