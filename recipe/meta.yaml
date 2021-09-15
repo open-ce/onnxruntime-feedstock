@@ -12,6 +12,7 @@ source:
     patches:
       - 0001-Use-more-system-libraries.patch
       - 0001-Fixed-build-with-gcc-7.patch
+      - 0001-Add-cmake-changes-to-link-against-libmemcpy-wrapper-.patch  #[x86_64 and build_type=='cuda' and c_compiler_version == "7.2.*" and (cudatoolkit=='11.0' or cudatoolkit=='11.2')]
       - 0001-Fix-for-tests-failures-with-cuda-build-type.patch       #[build_type=='cuda']
   - url: https://github.com/onnx/onnx/archive/971632833036c576cf95499291f689f8bb3519e1.zip
     sha256: 340999131688d6ab7a7939df587057cc9e49d326fc112ff65b58e121a0afad92
@@ -74,6 +75,7 @@ requirements:
     {% if build_type == 'cuda' %}
     - cudatoolkit {{ cudatoolkit }}
     - cudnn {{ cudnn }}
+    - libmemcpy_wrapper                      #[x86_64 and c_compiler_version == "7.2.*" and (cudatoolkit=='11.0' or cudatoolkit=='11.2')]
     {% endif %}
   run:
     - python {{ python }}
@@ -82,6 +84,7 @@ requirements:
     {% if build_type == 'cuda' %}
     - cudatoolkit {{ cudatoolkit }}
     - cudnn {{ cudnn }}
+    - libmemcpy_wrapper                      #[x86_64 and c_compiler_version == "7.2.*" and (cudatoolkit=='11.0' or cudatoolkit=='11.2')]
     {% endif %}
 
 test:
