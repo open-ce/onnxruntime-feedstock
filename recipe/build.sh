@@ -17,8 +17,12 @@
 
 set -ex
 
-rm -r cmake/external/onnx cmake/external/eigen cmake/external/cub
-mv onnx eigen cub cmake/external/
+rm -r cmake/external/onnx cmake/external/eigen cmake/external/cub cmake/external/pytorch_cpuinfo
+mv onnx eigen cub json cmake/external/
+mkdir -p cmake/external/pytorch_cpuinfo
+cp -r cpuinfo/* cmake/external/pytorch_cpuinfo/
+
+rm -r cmake/external/protobuf
 
 pushd cmake/external/SafeInt/safeint
 ln -s $BUILD_PREFIX/include/SafeInt.hpp
@@ -56,6 +60,8 @@ fi
 
 export CUDACXX=$CUDA_HOME/bin/nvcc
 export LDFLAGS="${LDFLAGS} -L${PREFIX}/lib -L${BUILD_PREFIX}/lib -lre2 "
+export CXXFLAGS="${CXXFLAGS} -Wno-unused-parameter -Wno-unused"
+export CFLAGS="${CFLAGS} -Wno-unused-parameter -Wno-unused"
 
 python tools/ci_build/build.py \
     --enable_lto \

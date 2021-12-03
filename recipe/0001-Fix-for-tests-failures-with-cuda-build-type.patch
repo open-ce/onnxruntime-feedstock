@@ -1,36 +1,35 @@
-From 91c52ed28807560fb8278647c4edab7a28eb0f3b Mon Sep 17 00:00:00 2001
+From b06277bdb942d2315d46b407a00b4801d5887c7b Mon Sep 17 00:00:00 2001
 From: Nishidha Panpaliya <npanpa23@in.ibm.com>
-Date: Sun, 5 Sep 2021 13:01:57 -0400
+Date: Mon, 15 Nov 2021 09:29:06 -0500
 Subject: [PATCH] Fix for tests failures with cuda build type
 
 ---
- cmake/onnxruntime_unittests.cmake | 6 +++++-
- 1 file changed, 5 insertions(+), 1 deletion(-)
+ cmake/onnxruntime_unittests.cmake | 5 ++++-
+ 1 file changed, 4 insertions(+), 1 deletion(-)
 
 diff --git a/cmake/onnxruntime_unittests.cmake b/cmake/onnxruntime_unittests.cmake
-index e73397b2d..111bb1e43 100644
+index 7cd6aac8a..0c154eaed 100644
 --- a/cmake/onnxruntime_unittests.cmake
 +++ b/cmake/onnxruntime_unittests.cmake
-@@ -819,6 +819,10 @@ if (onnxruntime_BUILD_SHARED_LIB)
-           onnxruntime onnxruntime_flatbuffers  onnx_test_data_proto 
-           ${onnxruntime_EXTERNAL_LIBRARIES}
-           ${GETOPT_LIB_WIDE} ${SYS_PATH_LIB} ${CMAKE_DL_LIBS})
-+  if (onnxruntime_USE_CUDA)
-+    list(APPEND onnxruntime_perf_test_libs onnxruntime_test_cuda_ops_lib cudart cudnn cufft cublas)
-+  endif()
-+
-   if(NOT WIN32)
-     list(APPEND onnxruntime_perf_test_libs nsync_cpp)
-   endif()
-@@ -863,7 +867,7 @@ if (onnxruntime_BUILD_SHARED_LIB)
-     list(APPEND onnxruntime_shared_lib_test_LIBS nsync_cpp)
-   endif()
-   if (onnxruntime_USE_CUDA)
--    list(APPEND onnxruntime_shared_lib_test_LIBS onnxruntime_test_cuda_ops_lib cudart)
-+    list(APPEND onnxruntime_shared_lib_test_LIBS onnxruntime_test_cuda_ops_lib cudart cudnn cufft cublas)
-   endif()
-   if (CMAKE_SYSTEM_NAME STREQUAL "Android")
-     list(APPEND onnxruntime_shared_lib_test_LIBS ${android_shared_libs})
+@@ -964,6 +964,9 @@ if (NOT onnxruntime_ENABLE_TRAINING_TORCH_INTEROP)
+             onnxruntime onnxruntime_flatbuffers  onnx_test_data_proto
+             ${onnxruntime_EXTERNAL_LIBRARIES}
+             ${GETOPT_LIB_WIDE} ${SYS_PATH_LIB} ${CMAKE_DL_LIBS})
++    if (onnxruntime_USE_CUDA)
++      list(APPEND onnxruntime_perf_test_libs onnxruntime_test_cuda_ops_lib cudart cudnn cufft cublas)
++    endif()    
+     if(NOT WIN32)
+       list(APPEND onnxruntime_perf_test_libs nsync_cpp)
+     endif()
+@@ -1008,7 +1011,7 @@ if (NOT onnxruntime_ENABLE_TRAINING_TORCH_INTEROP)
+       list(APPEND onnxruntime_shared_lib_test_LIBS nsync_cpp)
+     endif()
+     if (onnxruntime_USE_CUDA)
+-      list(APPEND onnxruntime_shared_lib_test_LIBS onnxruntime_test_cuda_ops_lib cudart)
++      list(APPEND onnxruntime_shared_lib_test_LIBS onnxruntime_test_cuda_ops_lib cudart cudnn cufft cublas)
+     endif()
+     if (CMAKE_SYSTEM_NAME STREQUAL "Android")
+       list(APPEND onnxruntime_shared_lib_test_LIBS ${android_shared_libs})
 -- 
-2.23.0
+2.32.0
 
