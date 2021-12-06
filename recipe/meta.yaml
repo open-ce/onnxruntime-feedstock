@@ -52,6 +52,11 @@ requirements:
     - nlohmann_json {{ nlohmann_json }}
     - safeint {{ safeint }}
     - libdate {{ libdate }}
+    {% if build_type == 'cuda' %}
+    - cudatoolkit {{ cudatoolkit }}
+    - cudnn {{ cudnn }}
+    {% endif %}
+
   host:
     - python {{ python }}
     - pip
@@ -68,11 +73,6 @@ requirements:
     - numpy {{ numpy }}
     - pybind11
     - ninja {{ ninja }}
-    {% if build_type == 'cuda' %}
-    - cudatoolkit {{ cudatoolkit }}
-    - cudnn {{ cudnn }}
-    - libmemcpy_wrapper                      #[x86_64 and c_compiler_version == "7.2.*" and (cudatoolkit=='11.0' or cudatoolkit=='11.2')]
-    {% endif %}
 
   run:
     - python {{ python }}
@@ -82,7 +82,6 @@ requirements:
     {% if build_type == 'cuda' %}
     - cudatoolkit {{ cudatoolkit }}
     - cudnn {{ cudnn }}
-    - libmemcpy_wrapper                      #[x86_64 and c_compiler_version == "7.2.*" and (cudatoolkit=='11.0' or cudatoolkit=='11.2')]
     {% endif %}
 
 test:
