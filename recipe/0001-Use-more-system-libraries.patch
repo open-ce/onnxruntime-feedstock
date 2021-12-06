@@ -1,22 +1,22 @@
-From f37f95ba0c3319229d2a792bed66f1296327c070 Mon Sep 17 00:00:00 2001
+From c26bd138f84d8b18ad3f17c20647e5045e68f1c2 Mon Sep 17 00:00:00 2001
 From: Nishidha Panpaliya <npanpa23@in.ibm.com>
-Date: Mon, 15 Nov 2021 10:24:31 -0500
+Date: Mon, 6 Dec 2021 08:51:48 +0000
 Subject: [PATCH] Use more system libraries
 
 ---
- cmake/CMakeLists.txt | 30 ++++++++++++++++++++++++------
- 1 file changed, 24 insertions(+), 6 deletions(-)
+ cmake/CMakeLists.txt | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
 diff --git a/cmake/CMakeLists.txt b/cmake/CMakeLists.txt
-index 2534b99ff..d598e49cb 100644
+index acbde7f56..49f6ceaa1 100644
 --- a/cmake/CMakeLists.txt
 +++ b/cmake/CMakeLists.txt
-@@ -748,11 +748,11 @@ if(Protobuf_FOUND OR Protobuf_FOUND)
+@@ -741,11 +741,11 @@ if (Protobuf_FOUND)
      set(PROTOBUF_LIB protobuf::libprotobuf)
      #We have a check here but most of the cmake users don't know the Protobuf_USE_STATIC_LIBS
      # variable exists and may leave it in a wrong state.
--    if(NOT Protobuf_USE_STATIC_LIBS)
-+    #if(NOT Protobuf_USE_STATIC_LIBS)
+-    if (NOT Protobuf_USE_STATIC_LIBS)
++    #if (NOT Protobuf_USE_STATIC_LIBS)
        # ONNX Runtime itself can work in such a setting but it may cause compatibility issues
        # when ONNX Runtime is integrated with the other ONNX ecosystem softwares.
 -      message(WARNING "Use Protobuf_USE_STATIC_LIBS to ensure compatibility with other ONNX ecosystem components.")
@@ -26,51 +26,6 @@ index 2534b99ff..d598e49cb 100644
    else()
      set(PROTOBUF_LIB protobuf::libprotobuf-lite)
    endif()
-@@ -833,7 +833,13 @@ get_filename_component(ORTTRAINING_ROOT "${ORTTRAINING_ROOT}" ABSOLUTE)
- get_filename_component(REPO_ROOT "${REPO_ROOT}" ABSOLUTE)
- set(ONNXRUNTIME_INCLUDE_DIR ${REPO_ROOT}/include/onnxruntime)
- 
--add_subdirectory(external/date EXCLUDE_FROM_ALL)
-+if(onnxruntime_PREFER_SYSTEM_LIB)
-+  find_package(date)
-+  add_library(date_interface ALIAS date::date)
-+endif()
-+if(NOT TARGET date::date)
-+  add_subdirectory(external/date EXCLUDE_FROM_ALL)
-+endif()
- 
- set(SAFEINT_INCLUDE_DIR ${REPO_ROOT}/cmake/external/SafeInt)
- add_library(safeint_interface INTERFACE)
-@@ -844,7 +850,12 @@ if(onnxruntime_DISABLE_EXCEPTIONS)
-   add_compile_definitions(optional_CONFIG_NO_EXCEPTIONS=1)
- endif()
- 
--add_subdirectory(external/mp11 EXCLUDE_FROM_ALL)
-+if(onnxruntime_PREFER_SYSTEM_LIB)
-+  find_package(boost_mp11)
-+endif()
-+if(NOT TARGET Boost::mp11)
-+  add_subdirectory(external/mp11 EXCLUDE_FROM_ALL)
-+endif()
- 
- set(JSON_BuildTests OFF CACHE INTERNAL "")
- set(JSON_Install OFF CACHE INTERNAL "")
-@@ -1414,7 +1425,14 @@ set(FLATBUFFERS_INSTALL OFF CACHE BOOL "FLATBUFFERS_INSTALL" FORCE)
- set(FLATBUFFERS_BUILD_FLATHASH OFF CACHE BOOL "FLATBUFFERS_BUILD_FLATHASH" FORCE)
- set(FLATBUFFERS_BUILD_FLATLIB ON CACHE BOOL "FLATBUFFERS_BUILD_FLATLIB" FORCE)
- set_msvc_c_cpp_compiler_warning_level(4)
--add_subdirectory(external/flatbuffers EXCLUDE_FROM_ALL)
-+if(onnxruntime_PREFER_SYSTEM_LIB)
-+  find_package(Flatbuffers)
-+  add_library(flatbuffers ALIAS flatbuffers::flatbuffers)
-+endif()
-+if(NOT TARGET flatbuffers::flatbuffers)
-+  add_subdirectory(external/flatbuffers EXCLUDE_FROM_ALL)
-+endif()
-+
- set_msvc_c_cpp_compiler_warning_level(3)
- list(APPEND onnxruntime_EXTERNAL_DEPENDENCIES flatbuffers)
- list(APPEND onnxruntime_EXTERNAL_LIBRARIES flatbuffers)
 -- 
 2.32.0
 

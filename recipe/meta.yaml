@@ -1,5 +1,5 @@
 {% set name = "onnxruntime" %}
-{% set version = "1.9.1" %}
+{% set version = "1.10.0" %}
 
 
 package:
@@ -8,7 +8,7 @@ package:
 
 source:
   - url: https://github.com/microsoft/onnxruntime/archive/refs/tags/v{{ version }}.tar.gz
-    sha256: 21632fe1354abdec6d513ea8fe88aa83b1bc05d801a82642cf816b580b5cda7c
+    sha256: 6b927f00177d6fcfa3141766540e651c551e338373364bb990396559e59b1860
     patches:
       - 0001-Use-more-system-libraries.patch
       - 0001-Fixed-build-with-gcc-7.patch
