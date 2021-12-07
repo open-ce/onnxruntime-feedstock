@@ -1,5 +1,5 @@
 {% set name = "onnxruntime" %}
-{% set version = "1.9.1" %}
+{% set version = "1.10.0" %}
 
 
 package:
@@ -8,14 +8,14 @@ package:
 
 source:
   - url: https://github.com/microsoft/onnxruntime/archive/refs/tags/v{{ version }}.tar.gz
-    sha256: 21632fe1354abdec6d513ea8fe88aa83b1bc05d801a82642cf816b580b5cda7c
+    sha256: 6b927f00177d6fcfa3141766540e651c551e338373364bb990396559e59b1860
     patches:
       - 0001-Use-more-system-libraries.patch
       - 0001-Fixed-build-with-gcc-7.patch
       - 0001-Fix-for-tests-failures-with-cuda-build-type.patch       #[build_type=='cuda']
       - 0001-Fix-for-NVCC-error.patch                                #[build_type=='cuda']
-  - url: https://github.com/onnx/onnx/archive/1f63dcb7fcc3a8bf5c3c8e326867ecd6f5c43f35.zip
-    sha256: df0031af7cdcc18fd49a07aa171a5720dcddcc8ed4735f50288224131c66f071
+  - url: https://github.com/onnx/onnx/archive/be76ca7148396176784ba8733133b9fb1186ea0d.zip
+    sha256: df88e96829487fac09ccc3cae5593674d43632568ab154d0a8dcf08a814b0c4a
     folder: onnx
   - url: https://gitlab.com/libeigen/eigen/-/archive/d10b27fe37736d2944630ecd7557cefa95cf87c9/eigen-d10b27fe37736d2944630ecd7557cefa95cf87c9.tar.gz
     sha256: a3c10a8c14f55e9f09f98b0a0ac6874c21bda91f65b7469d9b1f6925990e867b
@@ -52,6 +52,11 @@ requirements:
     - nlohmann_json {{ nlohmann_json }}
     - safeint {{ safeint }}
     - libdate {{ libdate }}
+    {% if build_type == 'cuda' %}
+    - cudatoolkit {{ cudatoolkit }}
+    - cudnn {{ cudnn }}
+    {% endif %}
+
   host:
     - python {{ python }}
     - pip
@@ -68,11 +73,6 @@ requirements:
     - numpy {{ numpy }}
     - pybind11
     - ninja {{ ninja }}
-    {% if build_type == 'cuda' %}
-    - cudatoolkit {{ cudatoolkit }}
-    - cudnn {{ cudnn }}
-    - libmemcpy_wrapper                      #[x86_64 and c_compiler_version == "7.2.*" and (cudatoolkit=='11.0' or cudatoolkit=='11.2')]
-    {% endif %}
 
   run:
     - python {{ python }}
@@ -82,7 +82,6 @@ requirements:
     {% if build_type == 'cuda' %}
     - cudatoolkit {{ cudatoolkit }}
     - cudnn {{ cudnn }}
-    - libmemcpy_wrapper                      #[x86_64 and c_compiler_version == "7.2.*" and (cudatoolkit=='11.0' or cudatoolkit=='11.2')]
     {% endif %}
 
 test:
