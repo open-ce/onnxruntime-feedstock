@@ -25,7 +25,7 @@ source:
     folder: cub
 
 build:
-  number: 2
+  number: 3
   string: h{{ PKG_HASH }}_{{ build_type }}_py{{ python | replace(".", "") }}_pb{{ protobuf | replace(".*", "")}}_{{ PKG_BUILDNUM }}   #[build_type == 'cpu']
   string: h{{ PKG_HASH }}_{{ build_type }}{{ cudatoolkit | replace(".*", "") }}_py{{ python | replace(".", "") }}_pb{{ protobuf | replace(".*", "")}}_{{ PKG_BUILDNUM }} #[build_type == 'cuda']
   {% if build_type == 'cuda' %}
@@ -35,14 +35,9 @@ build:
 
 requirements:
   build:
-    - python {{ python }}                    # [build_platform != target_platform]
-    - cross-python_{{ target_platform }}     # [build_platform != target_platform]
-    - numpy {{ numpy }}                      # [build_platform != target_platform]
-    - pybind11                               # [build_platform != target_platform]
     - {{ compiler('c') }}
     - {{ compiler('cxx') }}
     - cmake {{ cmake }}
-    - ninja {{ ninja }}
     - libprotobuf {{ protobuf }}
     # Use pins to control cos6/cos7 match
     - libgcc-ng  {{ libgcc }}         # [x86_64 and c_compiler_version == "7.2.*"]
@@ -75,6 +70,7 @@ requirements:
     - libprotobuf-static {{ protobuf }}
     - numpy {{ numpy }}
     - pybind11
+    - ninja {{ ninja }}
     # Use pins to control cos6/cos7 match
     - libgcc-ng  {{ libgcc }}         # [x86_64 and c_compiler_version == "7.2.*"]
     - libstdcxx-ng  {{ libstdcxx }}   # [x86_64 and c_compiler_version == "7.2.*"]
