@@ -1,6 +1,6 @@
 #!/bin/bash
 # *****************************************************************
-# (C) Copyright IBM Corp. 2021. All Rights Reserved.
+# (C) Copyright IBM Corp. 2021, 2022. All Rights Reserved.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -60,11 +60,22 @@ fi
 
 export CUDACXX=$CUDA_HOME/bin/nvcc
 export LDFLAGS="${LDFLAGS} -L${PREFIX}/lib -L${BUILD_PREFIX}/lib -lre2 "
-export CXXFLAGS="${CXXFLAGS} -Wno-unused-parameter -Wno-unused"
+export CXXFLAGS="${CXXFLAGS} -I${PREFIX}/include -Wno-unused-parameter -Wno-unused"
 export CFLAGS="${CFLAGS} -Wno-unused-parameter -Wno-unused"
 
+if [[ $ppc_arch == "p10" ]]
+then
+    # Removing these libs so that libonnxruntime.so links against libstdc++.so present on
+    # the system provided by gcc-toolset-10
+    rm ${PREFIX}/lib/libstdc++.so*
+    rm ${BUILD_PREFIX}/lib/libstdc++.so*
+    LTO=""
+else
+    LTO="--enable_lto"
+fi
+
 python tools/ci_build/build.py \
-    --enable_lto \
+    $LTO \
     --build_dir build-ci \
     --use_full_protobuf \
     ${CUDA_ARGS} \
