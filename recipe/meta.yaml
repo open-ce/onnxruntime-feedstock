@@ -1,5 +1,5 @@
 {% set name = "onnxruntime" %}
-{% set version = "1.10.0" %}
+{% set version = "1.11.0" %}
 
 
 package:
@@ -8,12 +8,12 @@ package:
 
 source:
   - url: https://github.com/microsoft/onnxruntime/archive/refs/tags/v{{ version }}.tar.gz
-    sha256: 04284491563d2b50e27d463d9b2ebb6a8ed61ce70ec1eb3d55267be557c0bccb
+    sha256: f12753d00b1b398e96b9080b3f709d175e2469a3914a0b578ee4ce7a1ca08109
     patches:
       - 0001-Fix-for-tests-failures-with-cuda-build-type.patch       #[build_type=='cuda']
       - 0001-Fix-for-NVCC-error.patch                                #[build_type=='cuda']
-  - url: https://github.com/onnx/onnx/archive/be76ca7148396176784ba8733133b9fb1186ea0d.zip
-    sha256: df88e96829487fac09ccc3cae5593674d43632568ab154d0a8dcf08a814b0c4a
+  - url: https://github.com/onnx/onnx/archive/850a81b0b77786bf99ea90580242b084f86a6235.zip
+    sha256: fe4e792485e88b7ba745a78ddd8ee16346078e1991845ac95f01962a165d64bd
     folder: onnx
   - url: https://gitlab.com/libeigen/eigen/-/archive/d10b27fe37736d2944630ecd7557cefa95cf87c9/eigen-d10b27fe37736d2944630ecd7557cefa95cf87c9.tar.gz
     sha256: a3c10a8c14f55e9f09f98b0a0ac6874c21bda91f65b7469d9b1f6925990e867b
@@ -29,7 +29,7 @@ source:
     folder: cpuinfo
 
 build:
-  number: 3
+  number: 1
   string: h{{ PKG_HASH }}_{{ build_type }}_py{{ python | replace(".", "") }}_pb{{ protobuf | replace(".*", "")}}_{{ PKG_BUILDNUM }}   #[build_type == 'cpu']
   string: h{{ PKG_HASH }}_{{ build_type }}{{ cudatoolkit | replace(".*", "") }}_py{{ python | replace(".", "") }}_pb{{ protobuf | replace(".*", "")}}_{{ PKG_BUILDNUM }} #[build_type == 'cuda']
   {% if build_type == 'cuda' %}

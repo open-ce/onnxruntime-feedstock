@@ -60,8 +60,8 @@ fi
 
 export CUDACXX=$CUDA_HOME/bin/nvcc
 export LDFLAGS="${LDFLAGS} -L${PREFIX}/lib -L${BUILD_PREFIX}/lib -lre2 "
-export CXXFLAGS="${CXXFLAGS} -I${PREFIX}/include -Wno-unused-parameter -Wno-unused"
-export CFLAGS="${CFLAGS} -Wno-unused-parameter -Wno-unused"
+export CXXFLAGS="${CXXFLAGS} -I${PREFIX}/include -Wno-unused-parameter -Wno-unused -mcpu=power9"
+export CFLAGS="${CFLAGS} -Wno-unused-parameter -Wno-unused -mcpu=power9"
 
 if [[ $ppc_arch == "p10" ]]
 then
