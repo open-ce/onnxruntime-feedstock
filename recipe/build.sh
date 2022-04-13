@@ -32,6 +32,20 @@ pushd cmake/external/json
 ln -s $BUILD_PREFIX/include single_include
 popd
 
+PATH_VAR="$PATH"
+if [[ $ppc_arch == "p10" ]]
+then
+    if [[ -z "${GCC_11_HOME}" ]];
+    then
+        echo "Please set GCC_11_HOME to the install path of gcc-toolset-11"
+        exit 1
+    else
+        export PATH=${GCC_11_HOME}/bin/:$PATH
+    fi
+    GCC_USED=`which gcc`
+    echo "GCC being used is ${GCC_USED}"
+fi
+
 
 # Needs eigen 3.4
 # rm -rf cmake/external/eigen
@@ -63,8 +77,16 @@ export LDFLAGS="${LDFLAGS} -L${PREFIX}/lib -L${BUILD_PREFIX}/lib -lre2 "
 export CXXFLAGS="${CXXFLAGS} -I${PREFIX}/include -Wno-unused-parameter -Wno-unused"
 export CFLAGS="${CFLAGS} -Wno-unused-parameter -Wno-unused"
 
+ARCH=`uname -p`
+if [[ "${ARCH}" == 'ppc64le' ]]; then
+    export CXXFLAGS="${CXXFLAGS} -mcpu=power9"
+    export CFLAGS="${CFLAGS} -mcpu=power9"
+fi
+
 if [[ $ppc_arch == "p10" ]]
 then
+    export CXXFLAGS="${CXXFLAGS} -mtune=power10"
+    export CFLAGS="${CFLAGS} -mtune=power10"
     # Removing these libs so that libonnxruntime.so links against libstdc++.so present on
     # the system provided by gcc-toolset-10
     rm ${PREFIX}/lib/libstdc++.so*
@@ -95,3 +117,7 @@ else
   cp build-ci/Release/dist/onnxruntime-*.whl onnxruntime-${PKG_VERSION}-py3-none-any.whl
 fi
 python -m pip install onnxruntime*-${PKG_VERSION}-py3-none-any.whl
+
+#Restore PATH variable
+export PATH="$PATH_VAR"
+
