@@ -73,7 +73,7 @@ then
     export CXXFLAGS="${CXXFLAGS} -mtune=power10"
     export CFLAGS="${CFLAGS} -mtune=power10"
     # Removing these libs so that libonnxruntime.so links against libstdc++.so present on
-    # the system provided by gcc-toolset-10
+    # the system provided by gcc-toolset-11
     rm ${PREFIX}/lib/libstdc++.so*
     rm ${BUILD_PREFIX}/lib/libstdc++.so*
     LTO=""
