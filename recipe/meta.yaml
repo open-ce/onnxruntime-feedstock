@@ -72,7 +72,7 @@ requirements:
 
   run:
     - python {{ python }}
-    - {{ pin_compatible('numpy') }}
+    - numpy {{ numpy }}
     - protobuf {{ protobuf }}
     - python-flatbuffers {{ flatbuffers }}
     {% if build_type == 'cuda' %}
