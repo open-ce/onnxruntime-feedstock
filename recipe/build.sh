@@ -32,21 +32,6 @@ pushd cmake/external/json
 ln -s $BUILD_PREFIX/include single_include
 popd
 
-PATH_VAR="$PATH"
-if [[ $ppc_arch == "p10" ]]
-then
-    if [[ -z "${GCC_11_HOME}" ]];
-    then
-        echo "Please set GCC_11_HOME to the install path of gcc-toolset-11"
-        exit 1
-    else
-        export PATH=${GCC_11_HOME}/bin/:$PATH
-    fi
-    GCC_USED=`which gcc`
-    echo "GCC being used is ${GCC_USED}"
-fi
-
-
 # Needs eigen 3.4
 # rm -rf cmake/external/eigen
 # pushd cmake/external
@@ -88,7 +73,7 @@ then
     export CXXFLAGS="${CXXFLAGS} -mtune=power10"
     export CFLAGS="${CFLAGS} -mtune=power10"
     # Removing these libs so that libonnxruntime.so links against libstdc++.so present on
-    # the system provided by gcc-toolset-10
+    # the system provided by gcc-toolset-11
     rm ${PREFIX}/lib/libstdc++.so*
     rm ${BUILD_PREFIX}/lib/libstdc++.so*
     LTO=""
