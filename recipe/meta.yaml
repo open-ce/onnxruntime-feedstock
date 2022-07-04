@@ -37,8 +37,8 @@ build:
 
 requirements:
   build:
-    - {{ compiler('c') }}     # [ppc_arch != "p10"]
-    - {{ compiler('cxx') }}   # [ppc_arch != "p10"]
+    - {{ compiler('c') }}
+    - {{ compiler('cxx') }}
     - cmake {{ cmake }}
     - libprotobuf {{ protobuf }}
     - boost_mp11 {{ boost_mp11 }}
