@@ -17,7 +17,7 @@
 
 set -ex
 
-rm -r cmake/external/onnx cmake/external/eigen cmake/external/cub cmake/external/pytorch_cpuinfo
+rm -r cmake/external/onnx cmake/external/eigen cmake/external/cub cmake/external/pytorch_cpuinfo cmake/external/json
 mv onnx eigen cub json cmake/external/
 mkdir -p cmake/external/pytorch_cpuinfo
 cp -r cpuinfo/* cmake/external/pytorch_cpuinfo/
@@ -25,6 +25,7 @@ cp -r cpuinfo/* cmake/external/pytorch_cpuinfo/
 rm -r cmake/external/protobuf
 
 pushd cmake/external/SafeInt/safeint
+rm -f SafeInt.hpp
 ln -s $BUILD_PREFIX/include/SafeInt.hpp
 popd
 
@@ -63,9 +64,15 @@ export CXXFLAGS="${CXXFLAGS} -I${PREFIX}/include -Wno-unused-parameter -Wno-unus
 export CFLAGS="${CFLAGS} -Wno-unused-parameter -Wno-unused"
 
 ARCH=`uname -p`
-if [[ "${ARCH}" == 'ppc64le' ]]; then
+if [[ $ppc_arch == "p9" ]]; then
     export CXXFLAGS="${CXXFLAGS} -mcpu=power9"
     export CFLAGS="${CFLAGS} -mcpu=power9"
+fi
+
+if [[ $build_type == cpu || $cuda_versions == "11.4" ]]
+then
+    export CXXFLAGS="${CXXFLAGS} -fplt"
+    export CFLAGS="${CFLAGS} -fplt"
 fi
 
 if [[ $ppc_arch == "p10" ]]

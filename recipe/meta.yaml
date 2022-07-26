@@ -1,5 +1,5 @@
 {% set name = "onnxruntime" %}
-{% set version = "1.11.1" %}
+{% set version = "1.12.0" %}
 
 
 package:
@@ -7,13 +7,13 @@ package:
   version: {{ version }}
 
 source:
-  - url: https://github.com/microsoft/onnxruntime/archive/refs/tags/v{{ version }}.tar.gz
-    sha256: 307ba492dc6a35992ca561fa1c90ad919ed6bd40adef578a07725b5e88ccf633
+  - git_url: https://github.com/microsoft/onnxruntime
+    git_rev: v{{ version }}
     patches:
       - 0001-Fix-for-tests-failures-with-cuda-build-type.patch       #[build_type=='cuda']
       - 0001-Fix-for-NVCC-error.patch                                #[build_type=='cuda']
-  - url: https://github.com/onnx/onnx/archive/850a81b0b77786bf99ea90580242b084f86a6235.zip
-    sha256: fe4e792485e88b7ba745a78ddd8ee16346078e1991845ac95f01962a165d64bd
+  - url: https://github.com/onnx/onnx/archive/f7ee1ac60d06abe8e26c9b6bbe1e3db5286b614b.zip
+    sha256: aaee93635e2561f091f4ae007b0a6155b665cc43f72570bb9ff3279b578add1e
     folder: onnx
   - url: https://gitlab.com/libeigen/eigen/-/archive/d10b27fe37736d2944630ecd7557cefa95cf87c9/eigen-d10b27fe37736d2944630ecd7557cefa95cf87c9.tar.gz
     sha256: a3c10a8c14f55e9f09f98b0a0ac6874c21bda91f65b7469d9b1f6925990e867b
@@ -21,15 +21,15 @@ source:
   - url: https://github.com/NVlabs/cub/archive/c3cceac115c072fb63df1836ff46d8c60d9eb304.zip
     sha256: 8894c68d7549681591c34078dcd40cf34459b6c7d33407f07e2145d2adb683ee 
     folder: cub
-  - url: https://github.com/nlohmann/json/archive/db78ac1d7716f56fc9f1b030b715f872f93964e4.zip
-    sha256: 520907d368d32830771d1ed606821aa8a7501cbf7929b433c5ac0065027fa6e4
+  - url: https://github.com/nlohmann/json/archive/b5364faf9d732052506cefc933d3f4e4f04513a5.zip
+    sha256: 91d738fa41106dea869819911f97265e8d2c765c2049478bc0c1c845ec3afbbd
     folder: json
   - url: https://github.com/pytorch/cpuinfo/archive/5916273f79a21551890fd3d56fc5375a78d1598d.zip
     sha256: 2a160c527d3c58085ce260f34f9e2b161adc009b34186a2baf24e74376e89e6d 
     folder: cpuinfo
 
 build:
-  number: 2
+  number: 1
   string: h{{ PKG_HASH }}_{{ build_type }}_py{{ python | replace(".", "") }}_pb{{ protobuf | replace(".*", "")}}_{{ PKG_BUILDNUM }}   #[build_type == 'cpu']
   string: h{{ PKG_HASH }}_{{ build_type }}{{ cudatoolkit | replace(".*", "") }}_py{{ python | replace(".", "") }}_pb{{ protobuf | replace(".*", "")}}_{{ PKG_BUILDNUM }} #[build_type == 'cuda']
   script_env:
@@ -60,6 +60,9 @@ requirements:
     - flake8
     - flatbuffers {{ flatbuffers }}
     - python-flatbuffers {{ flatbuffers }}
+    - coloredlogs
+    - packaging
+    - sympy
     - re2
     - nsync
     - libprotobuf {{ protobuf }}
@@ -75,6 +78,9 @@ requirements:
     - numpy {{ numpy }}
     - protobuf {{ protobuf }}
     - python-flatbuffers {{ flatbuffers }}
+    - coloredlogs
+    - packaging
+    - sympy
     {% if build_type == 'cuda' %}
     - cudatoolkit {{ cudatoolkit }}
     - cudnn {{ cudnn }}
