@@ -69,7 +69,7 @@ if [[ $ppc_arch == "p9" ]]; then
     export CFLAGS="${CFLAGS} -mcpu=power9"
 fi
 
-if [[ $build_type == cpu || $cuda_versions == "11.4" ]]
+if [[ $build_type == cpu || $cudatoolkit == "11.4" ]]
 then
     export CXXFLAGS="${CXXFLAGS} -fplt"
     export CFLAGS="${CFLAGS} -fplt"
