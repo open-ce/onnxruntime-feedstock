@@ -64,10 +64,36 @@ export CXXFLAGS="${CXXFLAGS} -I${PREFIX}/include -Wno-unused-parameter -Wno-unus
 export CFLAGS="${CFLAGS} -Wno-unused-parameter -Wno-unused"
 
 ARCH=`uname -p`
-if [[ $ppc_arch == "p9" ]]; then
-    export CXXFLAGS="${CXXFLAGS} -mcpu=power9"
-    export CFLAGS="${CFLAGS} -mcpu=power9"
+
+if [ -z "${cpu_opt_tune}"]; then
+     CPU_ARCH_FLAG='';
+else
+     if [[ "${ARCH}" == 'x86_64' || "${ARCH}" == 's390x' ]]; then
+          CPU_ARCH_FLAG="-march=${cpu_opt_arch}"
+     fi
+     if [[ "${ARCH}" == 'ppc64le' ]]; then
+          CPU_ARCH_FLAG="-mcpu=${cpu_opt_arch}"
+     fi
 fi
+
+if [ -z "${cpu_opt_tune}"]; then
+     CPU_TUNE_FLAG='';
+else
+     CPU_TUNE_FLAG="-mtune=${cpu_opt_tune}";
+fi
+
+if [ -z "${vector_settings}"]; then
+     VEC_OPTIONS='';
+else
+     vecs=$(echo ${vector_settings} | tr "," "\n")
+     for setting in $vecs
+     do
+          VEC_OPTIONS+="-m${setting} ${NL}"
+     done
+fi
+
+export CXXFLAGS="${CXXFLAGS} $CPU_ARCH_FLAG $CPU_TUNE_FLAG $VEC_OPTIONS"
+export CFLAGS="${CFLAGS} $CPU_ARCH_FLAG $CPU_TUNE_FLAG $VEC_OPTIONS"
 
 if [[ $build_type == cpu || $cudatoolkit == "11.4" ]]
 then
@@ -77,8 +103,6 @@ fi
 
 if [[ $ppc_arch == "p10" ]]
 then
-    export CXXFLAGS="${CXXFLAGS} -mtune=power10"
-    export CFLAGS="${CFLAGS} -mtune=power10"
     # Removing these libs so that libonnxruntime.so links against libstdc++.so present on
     # the system provided by gcc-toolset-11
     rm ${PREFIX}/lib/libstdc++.so*
