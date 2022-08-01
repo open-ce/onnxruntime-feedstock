@@ -72,7 +72,15 @@ else
           CPU_ARCH_FLAG="-march=${cpu_opt_arch}"
      fi
      if [[ "${ARCH}" == 'ppc64le' ]]; then
-          CPU_ARCH_FLAG="-mcpu=${cpu_opt_arch}"
+          if [[ $ppc_arch == "p10" ]]; then
+              CPU_ARCH_FLAG="-mcpu=${cpu_opt_arch}"
+          else
+              # We can't use mcpu=power8 here because onnxruntime doesn't build for it.
+              # Error: lto1: "error: builtin function '__builtin_altivec_stxvl' requires
+              # the '-mcpu=power9' and '-m64' options"
+              # This is the reason why onnxruntime built on P9 won't work on P8 systems.
+              CPU_ARCH_FLAG="-mcpu=power9"
+          fi
      fi
 fi
 
