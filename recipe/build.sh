@@ -1,6 +1,6 @@
 #!/bin/bash
 # *****************************************************************
-# (C) Copyright IBM Corp. 2021, 2022. All Rights Reserved.
+# (C) Copyright IBM Corp. 2021, 2023. All Rights Reserved.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -16,28 +16,6 @@
 # *****************************************************************
 
 set -ex
-
-rm -r cmake/external/onnx cmake/external/eigen cmake/external/cub cmake/external/pytorch_cpuinfo cmake/external/json
-mv onnx eigen cub json cmake/external/
-mkdir -p cmake/external/pytorch_cpuinfo
-cp -r cpuinfo/* cmake/external/pytorch_cpuinfo/
-
-rm -r cmake/external/protobuf
-
-pushd cmake/external/SafeInt/safeint
-rm -f SafeInt.hpp
-ln -s $BUILD_PREFIX/include/SafeInt.hpp
-popd
-
-pushd cmake/external/json
-ln -s $BUILD_PREFIX/include single_include
-popd
-
-# Needs eigen 3.4
-# rm -rf cmake/external/eigen
-# pushd cmake/external
-# ln -s $PREFIX/include/eigen3 eigen
-# popd
 
 CUDA_ARGS=""
 CMAKE_CUDA_EXTRA_DEFINES=""
@@ -65,7 +43,7 @@ export CFLAGS="${CFLAGS} -Wno-unused-parameter -Wno-unused"
 
 ARCH=`uname -p`
 
-if [ -z "${cpu_opt_tune}"]; then
+if [[ -z "${cpu_opt_arch}" ]]; then
      CPU_ARCH_FLAG='';
 else
      if [[ "${ARCH}" == 'x86_64' || "${ARCH}" == 's390x' ]]; then
@@ -84,13 +62,13 @@ else
      fi
 fi
 
-if [ -z "${cpu_opt_tune}"]; then
+if [[ -z "${cpu_opt_tune}" ]]; then
      CPU_TUNE_FLAG='';
 else
      CPU_TUNE_FLAG="-mtune=${cpu_opt_tune}";
 fi
 
-if [ -z "${vector_settings}"]; then
+if [[ -z "${vector_settings}" ]]; then
      VEC_OPTIONS='';
 else
      vecs=$(echo ${vector_settings} | tr "," "\n")
