@@ -1,0 +1,101 @@
+From a1a67143baf8eda525f20d1758910fee8404b0e8 Mon Sep 17 00:00:00 2001
+From: Nishidha Panpaliya <npanpa23@in.ibm.com>
+Date: Mon, 20 Mar 2023 13:04:13 +0000
+Subject: [PATCH] Updated protobuf to 3.21.12
+
+---
+ cmake/deps.txt                                |  4 +--
+ .../external/onnxruntime_external_deps.cmake  | 12 +++----
+ cmake/patches/protobuf/protobuf_cmake.patch   | 31 -------------------
+ 3 files changed, 8 insertions(+), 39 deletions(-)
+ delete mode 100644 cmake/patches/protobuf/protobuf_cmake.patch
+
+diff --git a/cmake/deps.txt b/cmake/deps.txt
+index d16245ba83..08885795e4 100644
+--- a/cmake/deps.txt
++++ b/cmake/deps.txt
+@@ -26,7 +26,7 @@ mp11;https://github.com/boostorg/mp11/archive/refs/tags/boost-1.79.0.zip;c8f04e3
+ onnx;https://github.com/onnx/onnx/archive/refs/tags/v1.13.0.zip;8dda5079cdb5a134b08b0c73f4592a6404fc2dc6
+ #use the commit where it's several commits after 8.5-GA branch (https://github.com/onnx/onnx-tensorrt/commit/369d6676423c2a6dbf4a5665c4b5010240d99d3c)
+ onnx_tensorrt;https://github.com/onnx/onnx-tensorrt/archive/369d6676423c2a6dbf4a5665c4b5010240d99d3c.zip;62119892edfb78689061790140c439b111491275
+-protobuf;https://github.com/protocolbuffers/protobuf/archive/refs/tags/v3.20.2.zip;9f71dad95fb83438e88822a9969fc93773fd8c48
++protobuf;https://github.com/protocolbuffers/protobuf/archive/refs/tags/v3.21.12.zip;5f0ea65887f2a0547087a01c0d23f43dba17a523
+ psimd;https://github.com/Maratyszcza/psimd/archive/072586a71b55b7f8c584153d223e95687148a900.zip;1f5454b01f06f9656b77e4a5e2e31d7422487013
+ pthreadpool;https://github.com/Maratyszcza/pthreadpool/archive/1787867f6183f056420e532eec640cba25efafea.zip;e43e80781560c5ab404a4da20f34d846f5f5d101
+ pybind11;https://github.com/pybind/pybind11/archive/refs/tags/v2.10.1.zip;769b6aa67a77f17a770960f604b727645b6f6a13
+@@ -42,4 +42,4 @@ boost;https://github.com/boostorg/boost/archive/refs/tags/boost-1.81.0.zip;f6ab0
+ b64;https://github.com/libb64/libb64/archive/refs/tags/v2.0.0.1.zip;815b6d31d50d9e63df55b25ce555e7b787153c28
+ pthread;https://sourceforge.net/projects/pthreads4w/files/pthreads4w-code-v3.0.0.zip;3b9e417e4474c34542b76ad40529e396ac109fb4
+ triton;https://github.com/triton-inference-server/server/archive/refs/tags/v2.28.0.zip;4b305570aa1e889946e20e36050b6770e4108fee
+-# above are deps introduced by triton client, might remove after 1.14 release
+\ No newline at end of file
++# above are deps introduced by triton client, might remove after 1.14 release
+diff --git a/cmake/external/onnxruntime_external_deps.cmake b/cmake/external/onnxruntime_external_deps.cmake
+index 0c41945778..8496295bef 100644
+--- a/cmake/external/onnxruntime_external_deps.cmake
++++ b/cmake/external/onnxruntime_external_deps.cmake
+@@ -104,18 +104,18 @@ FetchContent_Declare(
+ #1. if ONNX_CUSTOM_PROTOC_EXECUTABLE is set, build Protobuf from source, except protoc.exe. This mode is mainly
+ #   for cross-compiling
+ #2. if ONNX_CUSTOM_PROTOC_EXECUTABLE is not set, Compile everything(including protoc) from source code.
+-if(Patch_FOUND)
+-  set(ONNXRUNTIME_PROTOBUF_PATCH_COMMAND ${Patch_EXECUTABLE} --binary --ignore-whitespace -p1 < ${PROJECT_SOURCE_DIR}/patches/protobuf/protobuf_cmake.patch)
+-else()
+- set(ONNXRUNTIME_PROTOBUF_PATCH_COMMAND "")
+-endif()
++#if(Patch_FOUND)
++#  set(ONNXRUNTIME_PROTOBUF_PATCH_COMMAND ${Patch_EXECUTABLE} --binary --ignore-whitespace -p1 < ${PROJECT_SOURCE_DIR}/patches/protobuf/protobuf_cmake.patch)
++#else()
++set(ONNXRUNTIME_PROTOBUF_PATCH_COMMAND "")
++#endif()
+ FetchContent_Declare(
+   Protobuf
+   URL ${DEP_URL_protobuf}
+   URL_HASH SHA1=${DEP_SHA1_protobuf}
+   SOURCE_SUBDIR  cmake
+   PATCH_COMMAND ${ONNXRUNTIME_PROTOBUF_PATCH_COMMAND}
+-  FIND_PACKAGE_ARGS 3.20.2 NAMES Protobuf
++  FIND_PACKAGE_ARGS 3.21.12 NAMES Protobuf
+ )
+ set(protobuf_BUILD_TESTS OFF CACHE BOOL "Build protobuf tests" FORCE)
+ if (CMAKE_SYSTEM_NAME STREQUAL "Android")
+diff --git a/cmake/patches/protobuf/protobuf_cmake.patch b/cmake/patches/protobuf/protobuf_cmake.patch
+deleted file mode 100644
+index 0b8887146f..0000000000
+--- a/cmake/patches/protobuf/protobuf_cmake.patch
++++ /dev/null
+@@ -1,31 +0,0 @@
+-diff --git a/cmake/CMakeLists.txt b/cmake/CMakeLists.txt
+-index ac92442a1..e930cbd2e 100644
+---- a/cmake/CMakeLists.txt
+-+++ b/cmake/CMakeLists.txt
+-@@ -240,9 +240,7 @@ if (MSVC)
+-   # MSVC warning suppressions
+-   add_definitions(
+-     /wd4065 # switch statement contains 'default' but no 'case' labels
+--    /wd4244 # 'conversion' conversion from 'type1' to 'type2', possible loss of data
+-     /wd4251 # 'identifier' : class 'type' needs to have dll-interface to be used by clients of class 'type2'
+--    /wd4267 # 'var' : conversion from 'size_t' to 'type', possible loss of data
+-     /wd4305 # 'identifier' : truncation from 'type1' to 'type2'
+-     /wd4307 # 'operator' : integral constant overflow
+-     /wd4309 # 'conversion' : truncation of constant value
+-@@ -250,7 +248,6 @@ if (MSVC)
+-     /wd4355 # 'this' : used in base member initializer list
+-     /wd4506 # no definition for inline function 'function'
+-     /wd4800 # 'type' : forcing value to bool 'true' or 'false' (performance warning)
+--    /wd4996 # The compiler encountered a deprecated declaration.
+-   )
+-   # Allow big object
+-   add_definitions(/bigobj)
+-@@ -272,6 +269,8 @@ if (MSVC)
+-   endif()
+- 
+-   configure_file(version.rc.in ${CMAKE_CURRENT_BINARY_DIR}/version.rc @ONLY)
+-+else (MSVC)
+-+  set(CMAKE_CXX_FLAGS  "${CMAKE_CXX_FLAGS} -Wno-unused-parameter")
+- endif (MSVC)
+- 
+- 
+-- 
+2.34.1
+
