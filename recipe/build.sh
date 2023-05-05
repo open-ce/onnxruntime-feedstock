@@ -29,9 +29,6 @@ then
   ONNX_CUDA_ARCH="${ONNX_CUDA_ARCH//./}"
 
   CUDA_VERSION="${cudatoolkit%.*}"
-  if [[ $CUDA_VERSION == '10' ]]; then
-    ONNX_CUDA_ARCH="${ONNX_CUDA_ARCH//;75/}"     # Onnxruntime fails with cudatoolkit 10.2 for cuda compute 75
-  fi
   echo $ONNX_CUDA_ARCH
   CMAKE_CUDA_EXTRA_DEFINES+=" CMAKE_CUDA_ARCHITECTURES=${ONNX_CUDA_ARCH} "
 fi
@@ -81,7 +78,7 @@ fi
 export CXXFLAGS="${CXXFLAGS} $CPU_ARCH_FLAG $CPU_TUNE_FLAG $VEC_OPTIONS"
 export CFLAGS="${CFLAGS} $CPU_ARCH_FLAG $CPU_TUNE_FLAG $VEC_OPTIONS"
 
-if [[ $build_type == cpu || $cudatoolkit == "11.4" ]]
+if [[ $build_type == cpu || $cudatoolkit == "11.8" ]]
 then
     export CXXFLAGS="${CXXFLAGS} -fplt"
     export CFLAGS="${CFLAGS} -fplt"
