@@ -13,6 +13,7 @@ source:
       - 0001-Fix-for-tests-failures-with-cuda-build-type.patch       #[build_type=='cuda']
       - 0001-Fix-for-NVCC-error.patch                                #[build_type=='cuda']
       - 0001-Updated-protobuf-to-3.21.patch
+      - 0001-Fix-shared-lib-re2-not-found.patch
 
 build:
   number: 1

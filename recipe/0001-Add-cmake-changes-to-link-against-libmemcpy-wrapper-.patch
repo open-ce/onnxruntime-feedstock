@@ -1,32 +1,32 @@
-From 3d033097c13af14d51327e900587a348786fa43a Mon Sep 17 00:00:00 2001
+From 9bdbf0a8e92622ecf3a2929cded2742ae1c77252 Mon Sep 17 00:00:00 2001
 From: Nishidha Panpaliya <npanpa23@in.ibm.com>
-Date: Mon, 9 Aug 2021 04:07:30 -0400
+Date: Wed, 10 May 2023 13:31:41 +0000
 Subject: [PATCH] Add cmake changes to link against libmemcpy wrapper
 
 ---
- cmake/CMakeLists.txt | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+ cmake/external/onnxruntime_external_deps.cmake | 2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/cmake/CMakeLists.txt b/cmake/CMakeLists.txt
-index a07893771..66f93715f 100644
---- a/cmake/CMakeLists.txt
-+++ b/cmake/CMakeLists.txt
-@@ -710,6 +710,7 @@ if(onnxruntime_USE_CUDA)
-         list(APPEND onnxruntime_LINK_DIRS ${onnxruntime_CUDNN_HOME}/lib/x64 ${onnxruntime_CUDA_HOME}/x64/lib64)
-       else()
-         list(APPEND onnxruntime_LINK_DIRS ${onnxruntime_CUDNN_HOME}/lib64 ${onnxruntime_CUDA_HOME}/lib64)
-+        list(APPEND onnxruntime_LINK_DIRS "$ENV{PREFIX}/lib" )
+diff --git a/cmake/external/onnxruntime_external_deps.cmake b/cmake/external/onnxruntime_external_deps.cmake
+index 9f03e523e6..0b47e02eef 100644
+--- a/cmake/external/onnxruntime_external_deps.cmake
++++ b/cmake/external/onnxruntime_external_deps.cmake
+@@ -446,6 +446,7 @@ message("Finished fetching external dependencies")
+ 
+ 
+ set(onnxruntime_LINK_DIRS )
++list(APPEND onnxruntime_LINK_DIRS "$ENV{PREFIX}/lib" )
+ if (onnxruntime_USE_CUDA)
+       #TODO: combine onnxruntime_CUDNN_HOME and onnxruntime_CUDA_HOME, assume they are the same
+       if (WIN32)
+@@ -459,6 +460,7 @@ if (onnxruntime_USE_CUDA)
+         endif()
+         list(APPEND onnxruntime_LINK_DIRS ${onnxruntime_CUDA_HOME}/lib64)
        endif()
++      list(APPEND ONNXRUNTIME_CUDA_LIBRARIES cublas cudnn curand cufft memcpy-2.14)
  endif()
  
-@@ -1176,7 +1177,7 @@ if (onnxruntime_USE_CUDA)
-   if (onnxruntime_ENABLE_NVTX_PROFILE)
-     list(APPEND ONNXRUNTIME_CUDA_LIBRARIES cublas cudnn curand cufft nvToolsExt)
-   else()
--    list(APPEND ONNXRUNTIME_CUDA_LIBRARIES cublas cudnn curand cufft)
-+    list(APPEND ONNXRUNTIME_CUDA_LIBRARIES cublas cudnn curand cufft memcpy-2.14)
-   endif()
- 
-   list(APPEND onnxruntime_EXTERNAL_LIBRARIES ${ONNXRUNTIME_CUDA_LIBRARIES})
+ if(onnxruntime_USE_SNPE)
 -- 
-2.23.0
+2.34.1
+
