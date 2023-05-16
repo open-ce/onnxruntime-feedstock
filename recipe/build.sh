@@ -1,6 +1,6 @@
 #!/bin/bash
 # *****************************************************************
-# (C) Copyright IBM Corp. 2021, 2022. All Rights Reserved.
+# (C) Copyright IBM Corp. 2021, 2023. All Rights Reserved.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -19,6 +19,12 @@ set -ex
 
 rm -r cmake/external/onnx cmake/external/eigen cmake/external/cub cmake/external/pytorch_cpuinfo cmake/external/json
 mv onnx eigen cub json cmake/external/
+
+# Apply patch to fix CVE 2022-25882 in onnx
+pushd cmake/external/onnx
+patch -p1 < $RECIPE_DIR/0101-CVE-2022-25882.patch
+popd
+
 mkdir -p cmake/external/pytorch_cpuinfo
 cp -r cpuinfo/* cmake/external/pytorch_cpuinfo/
 
