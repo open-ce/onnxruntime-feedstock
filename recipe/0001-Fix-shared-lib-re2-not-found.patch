@@ -1,6 +1,6 @@
-From 783af8de3e5110c292170e14ee68f1bc98f92078 Mon Sep 17 00:00:00 2001
+From 9b427ec13465c7f472d6bd45d7b072e1da218d94 Mon Sep 17 00:00:00 2001
 From: Nishidha Panpaliya <npanpa23@in.ibm.com>
-Date: Wed, 10 May 2023 12:31:47 +0000
+Date: Mon, 19 Jun 2023 11:17:28 +0000
 Subject: [PATCH] Fix shared lib re2 not found
 
 ---
@@ -8,15 +8,15 @@ Subject: [PATCH] Fix shared lib re2 not found
  1 file changed, 1 insertion(+)
 
 diff --git a/cmake/CMakeLists.txt b/cmake/CMakeLists.txt
-index a5d28fb516..2b51765ce3 100644
+index 2e54063598..200e39204f 100644
 --- a/cmake/CMakeLists.txt
 +++ b/cmake/CMakeLists.txt
-@@ -1462,6 +1462,7 @@ if (WIN32)
+@@ -1491,6 +1491,7 @@ if (WIN32)
    list(APPEND onnxruntime_EXTERNAL_LIBRARIES debug Dbghelp)
  else()
-   list(APPEND onnxruntime_EXTERNAL_LIBRARIES nsync_cpp)
+   list(APPEND onnxruntime_EXTERNAL_LIBRARIES nsync::nsync_cpp)
 +  list(APPEND onnxruntime_EXTERNAL_LIBRARIES re2)
-   list(APPEND onnxruntime_EXTERNAL_LIBRARIES ${CMAKE_DL_LIBS} Threads::Threads)
+   list(APPEND onnxruntime_EXTERNAL_LIBRARIES ${ICONV_LIB} ${CMAKE_DL_LIBS} Threads::Threads)
  endif()
  
 -- 
