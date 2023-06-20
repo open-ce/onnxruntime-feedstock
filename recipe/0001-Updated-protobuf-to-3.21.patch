@@ -1,40 +1,44 @@
-From a1a67143baf8eda525f20d1758910fee8404b0e8 Mon Sep 17 00:00:00 2001
+From c596ed15b22f7305a0c2e081f38619ae4482a659 Mon Sep 17 00:00:00 2001
 From: Nishidha Panpaliya <npanpa23@in.ibm.com>
-Date: Mon, 20 Mar 2023 13:04:13 +0000
+Date: Mon, 19 Jun 2023 10:43:10 +0000
 Subject: [PATCH] Updated protobuf to 3.21.12
 
 ---
- cmake/deps.txt                                |  4 +--
- .../external/onnxruntime_external_deps.cmake  | 12 +++----
+ cmake/deps.txt                                |  6 ++--
+ .../external/onnxruntime_external_deps.cmake  | 10 +++---
  cmake/patches/protobuf/protobuf_cmake.patch   | 31 -------------------
  3 files changed, 8 insertions(+), 39 deletions(-)
  delete mode 100644 cmake/patches/protobuf/protobuf_cmake.patch
 
 diff --git a/cmake/deps.txt b/cmake/deps.txt
-index d16245ba83..08885795e4 100644
+index b887418256..883f3365eb 100644
 --- a/cmake/deps.txt
 +++ b/cmake/deps.txt
-@@ -26,7 +26,7 @@ mp11;https://github.com/boostorg/mp11/archive/refs/tags/boost-1.79.0.zip;c8f04e3
- onnx;https://github.com/onnx/onnx/archive/refs/tags/v1.13.0.zip;8dda5079cdb5a134b08b0c73f4592a6404fc2dc6
- #use the commit where it's several commits after 8.5-GA branch (https://github.com/onnx/onnx-tensorrt/commit/369d6676423c2a6dbf4a5665c4b5010240d99d3c)
- onnx_tensorrt;https://github.com/onnx/onnx-tensorrt/archive/369d6676423c2a6dbf4a5665c4b5010240d99d3c.zip;62119892edfb78689061790140c439b111491275
--protobuf;https://github.com/protocolbuffers/protobuf/archive/refs/tags/v3.20.2.zip;9f71dad95fb83438e88822a9969fc93773fd8c48
+@@ -26,10 +26,10 @@ mp11;https://github.com/boostorg/mp11/archive/refs/tags/boost-1.79.0.zip;c8f04e3
+ onnx;https://github.com/onnx/onnx/archive/refs/tags/v1.14.0.zip;3c6e43a36f94addc15afe939860127a1d74a9488
+ #use the last commit of 8.6-EA branch (https://github.com/onnx/onnx-tensorrt/commit/ba6a4fb34fdeaa3613bf981610c657e7b663a699)
+ onnx_tensorrt;https://github.com/onnx/onnx-tensorrt/archive/ba6a4fb34fdeaa3613bf981610c657e7b663a699.zip;5a474ed86e2c4ee4085d3daeff8222866e933dc0
+-protobuf;https://github.com/protocolbuffers/protobuf/archive/refs/tags/v21.12.zip;7cf2733949036c7d52fda017badcab093fe73bfa
 +protobuf;https://github.com/protocolbuffers/protobuf/archive/refs/tags/v3.21.12.zip;5f0ea65887f2a0547087a01c0d23f43dba17a523
+ protoc_win64;https://github.com/protocolbuffers/protobuf/releases/download/v21.12/protoc-21.12-win64.zip;b4521f7ada5b260380f94c4bd7f1b7684c76969a
+ protoc_win32;https://github.com/protocolbuffers/protobuf/releases/download/v21.12/protoc-21.12-win32.zip;3688010318192c46ce73213cdfb6b3e5656da874
+-protoc_linux_x64;https://github.com/protocolbuffers/protobuf/releases/download/v21.12/protoc-21.12-linux-x86_64.zip;338462004aa5be9fba45b35b5b4be43f69b47a90
++protoc_linux_x64;https://github.com/protocolbuffers/protobuf/releases/download/v3.21.12/protoc-3.21.12-linux-x86_64.zip;0019dfc4b32d63c1392aa264aed2253c1e0c2fb09216f8e2cc269bbfb8bb49b5
+ protoc_linux_x86;https://github.com/protocolbuffers/protobuf/releases/download/v21.12/protoc-21.12-linux-x86_32.zip;61fdbe7d6360e065ec6fea23bca2cca673115fb8
+ protoc_linux_aarch64;https://github.com/protocolbuffers/protobuf/releases/download/v21.12/protoc-21.12-linux-aarch_64.zip;df9d45470b0b8cf939dd2f0ec6b88e9cafc4d617
  psimd;https://github.com/Maratyszcza/psimd/archive/072586a71b55b7f8c584153d223e95687148a900.zip;1f5454b01f06f9656b77e4a5e2e31d7422487013
- pthreadpool;https://github.com/Maratyszcza/pthreadpool/archive/1787867f6183f056420e532eec640cba25efafea.zip;e43e80781560c5ab404a4da20f34d846f5f5d101
- pybind11;https://github.com/pybind/pybind11/archive/refs/tags/v2.10.1.zip;769b6aa67a77f17a770960f604b727645b6f6a13
-@@ -42,4 +42,4 @@ boost;https://github.com/boostorg/boost/archive/refs/tags/boost-1.81.0.zip;f6ab0
- b64;https://github.com/libb64/libb64/archive/refs/tags/v2.0.0.1.zip;815b6d31d50d9e63df55b25ce555e7b787153c28
- pthread;https://sourceforge.net/projects/pthreads4w/files/pthreads4w-code-v3.0.0.zip;3b9e417e4474c34542b76ad40529e396ac109fb4
+@@ -49,4 +49,4 @@ pthread;https://sourceforge.net/projects/pthreads4w/files/pthreads4w-code-v3.0.0
  triton;https://github.com/triton-inference-server/server/archive/refs/tags/v2.28.0.zip;4b305570aa1e889946e20e36050b6770e4108fee
--# above are deps introduced by triton client, might remove after 1.14 release
+ # above are deps introduced by triton client, might remove after 1.14 release
+ extensions;https://github.com/microsoft/onnxruntime-extensions/archive/94142d8391c9791ec71c38336436319a2d4ac7a0.zip;4365ac5140338b4cb75a39944a4be276e3829b3c
+-curl;https://github.com/curl/curl/archive/refs/tags/curl-8_0_1.zip;b16d1fa8ee567b52c09a0f89940b07d8491b881d
 \ No newline at end of file
-+# above are deps introduced by triton client, might remove after 1.14 release
++curl;https://github.com/curl/curl/archive/refs/tags/curl-8_0_1.zip;b16d1fa8ee567b52c09a0f89940b07d8491b881d
 diff --git a/cmake/external/onnxruntime_external_deps.cmake b/cmake/external/onnxruntime_external_deps.cmake
-index 0c41945778..8496295bef 100644
+index 9effd1a2db..494736a32f 100644
 --- a/cmake/external/onnxruntime_external_deps.cmake
 +++ b/cmake/external/onnxruntime_external_deps.cmake
-@@ -104,18 +104,18 @@ FetchContent_Declare(
+@@ -142,11 +142,11 @@ endif()
  #1. if ONNX_CUSTOM_PROTOC_EXECUTABLE is set, build Protobuf from source, except protoc.exe. This mode is mainly
  #   for cross-compiling
  #2. if ONNX_CUSTOM_PROTOC_EXECUTABLE is not set, Compile everything(including protoc) from source code.
@@ -46,30 +50,22 @@ index 0c41945778..8496295bef 100644
 +#if(Patch_FOUND)
 +#  set(ONNXRUNTIME_PROTOBUF_PATCH_COMMAND ${Patch_EXECUTABLE} --binary --ignore-whitespace -p1 < ${PROJECT_SOURCE_DIR}/patches/protobuf/protobuf_cmake.patch)
 +#else()
-+set(ONNXRUNTIME_PROTOBUF_PATCH_COMMAND "")
++# set(ONNXRUNTIME_PROTOBUF_PATCH_COMMAND "")
 +#endif()
  FetchContent_Declare(
    Protobuf
    URL ${DEP_URL_protobuf}
-   URL_HASH SHA1=${DEP_SHA1_protobuf}
-   SOURCE_SUBDIR  cmake
-   PATCH_COMMAND ${ONNXRUNTIME_PROTOBUF_PATCH_COMMAND}
--  FIND_PACKAGE_ARGS 3.20.2 NAMES Protobuf
-+  FIND_PACKAGE_ARGS 3.21.12 NAMES Protobuf
- )
- set(protobuf_BUILD_TESTS OFF CACHE BOOL "Build protobuf tests" FORCE)
- if (CMAKE_SYSTEM_NAME STREQUAL "Android")
 diff --git a/cmake/patches/protobuf/protobuf_cmake.patch b/cmake/patches/protobuf/protobuf_cmake.patch
 deleted file mode 100644
-index 0b8887146f..0000000000
+index fe8bd25ab1..0000000000
 --- a/cmake/patches/protobuf/protobuf_cmake.patch
 +++ /dev/null
 @@ -1,31 +0,0 @@
--diff --git a/cmake/CMakeLists.txt b/cmake/CMakeLists.txt
--index ac92442a1..e930cbd2e 100644
----- a/cmake/CMakeLists.txt
--+++ b/cmake/CMakeLists.txt
--@@ -240,9 +240,7 @@ if (MSVC)
+-diff --git a/CMakeLists.txt b/CMakeLists.txt
+-index 04cb3303a..4025805cf 100644
+---- a/CMakeLists.txt
+-+++ b/CMakeLists.txt
+-@@ -249,9 +249,7 @@ if (MSVC)
 -   # MSVC warning suppressions
 -   add_definitions(
 -     /wd4065 # switch statement contains 'default' but no 'case' labels
@@ -79,7 +75,7 @@ index 0b8887146f..0000000000
 -     /wd4305 # 'identifier' : truncation from 'type1' to 'type2'
 -     /wd4307 # 'operator' : integral constant overflow
 -     /wd4309 # 'conversion' : truncation of constant value
--@@ -250,7 +248,6 @@ if (MSVC)
+-@@ -259,7 +257,6 @@ if (MSVC)
 -     /wd4355 # 'this' : used in base member initializer list
 -     /wd4506 # no definition for inline function 'function'
 -     /wd4800 # 'type' : forcing value to bool 'true' or 'false' (performance warning)
@@ -87,15 +83,15 @@ index 0b8887146f..0000000000
 -   )
 -   # Allow big object
 -   add_definitions(/bigobj)
--@@ -272,6 +269,8 @@ if (MSVC)
--   endif()
-- 
--   configure_file(version.rc.in ${CMAKE_CURRENT_BINARY_DIR}/version.rc @ONLY)
--+else (MSVC)
+-@@ -289,7 +286,7 @@ if (MSVC)
+- else (MSVC)
+-   # No version.rc file.
+-   set(protobuf_version_rc_file)
+--
 -+  set(CMAKE_CXX_FLAGS  "${CMAKE_CXX_FLAGS} -Wno-unused-parameter")
-- endif (MSVC)
-- 
-- 
+-   # When building with "make", "lib" prefix will be added automatically by
+-   # the build tool.
+-   set(LIB_PREFIX)
 -- 
 2.34.1
 
