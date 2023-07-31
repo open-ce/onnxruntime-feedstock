@@ -108,7 +108,8 @@ python tools/ci_build/build.py \
     --config Release \
     --update \
     --build \
-    --skip_submodule_sync
+    --skip_submodule_sync \
+    --allow_running_as_root
 
 if [[ $build_type == "cuda" ]]
 then
