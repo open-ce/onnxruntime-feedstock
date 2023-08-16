@@ -78,12 +78,9 @@ fi
 
 export CXXFLAGS="${CXXFLAGS} $CPU_ARCH_FLAG $CPU_TUNE_FLAG $VEC_OPTIONS"
 export CFLAGS="${CFLAGS} $CPU_ARCH_FLAG $CPU_TUNE_FLAG $VEC_OPTIONS"
-
-if [[ $build_type == cpu || $cudatoolkit == "11.8" ]]
-then
-    export CXXFLAGS="${CXXFLAGS} -fplt"
-    export CFLAGS="${CFLAGS} -fplt"
-fi
+export LDFLAGS="${LDFLAGS} -L${PREFIX} -lre2"
+export CXXFLAGS="${CXXFLAGS} -fplt"
+export CFLAGS="${CFLAGS} -fplt"
 
 if [[ $ppc_arch == "p10" ]]
 then
