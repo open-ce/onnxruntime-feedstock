@@ -1,0 +1,199 @@
+From 5fdd7d3c23735b88843be88fa1beb9aff04aeedd Mon Sep 17 00:00:00 2001
+From: Nishidha Panpaliya <npanpa23@in.ibm.com>
+Date: Mon, 24 Jul 2023 12:00:39 +0000
+Subject: [PATCH] Fixed onnxruntime for flatbuffers
+
+---
+ cmake/deps.txt                                |  5 +-
+ onnxruntime/core/flatbuffers/schema/ort.fbs.h | 54 +++++++++----------
+ 2 files changed, 29 insertions(+), 30 deletions(-)
+
+diff --git a/cmake/deps.txt b/cmake/deps.txt
+index b887418256..bbb9577d8d 100644
+--- a/cmake/deps.txt
++++ b/cmake/deps.txt
+@@ -11,8 +11,7 @@ abseil_cpp;https://github.com/abseil/abseil-cpp/archive/refs/tags/20220623.1.zip
+ cxxopts;https://github.com/jarro2783/cxxopts/archive/3c73d91c0b04e2b59462f0a741be8c07024c1bc0.zip;6c6ca7f8480b26c8d00476e0e24b7184717fe4f0
+ date;https://github.com/HowardHinnant/date/archive/refs/tags/v2.4.1.zip;ea99f021262b1d804a872735c658860a6a13cc98
+ dlpack;https://github.com/dmlc/dlpack/archive/refs/tags/v0.6.zip;4d565dd2e5b31321e5549591d78aa7f377173445
+-flatbuffers;https://github.com/google/flatbuffers/archive/refs/tags/v1.12.0.zip;ba0a75fd12dbef8f6557a74e611b7a3d0c5fe7bf
+-fp16;https://github.com/Maratyszcza/FP16/archive/0a92994d729ff76a58f692d3028ca1b64b145d91.zip;b985f6985a05a1c03ff1bb71190f66d8f98a1494
++flatbuffers;https://github.com/google/flatbuffers/archive/refs/tags/v23.1.21.zip;f466352d07f90936a3494b59f479346dc5de7706;https://github.com/Maratyszcza/FP16/archive/0a92994d729ff76a58f692d3028ca1b64b145d91.zip;b985f6985a05a1c03ff1bb71190f66d8f98a1494
+ fxdiv;https://github.com/Maratyszcza/FXdiv/archive/63058eff77e11aa15bf531df5dd34395ec3017c8.zip;a5658f4036402dbca7cebee32be57fb8149811e1
+ google_benchmark;https://github.com/google/benchmark/archive/refs/tags/v1.7.0.zip;e97c368b176e8614e3f1bf13dd9abcf6a7ad9908
+ google_nsync;https://github.com/google/nsync/archive/refs/tags/1.23.0.zip;f3233450cf7156fc0bedd1b0e884eddec264897c
+@@ -49,4 +48,4 @@ pthread;https://sourceforge.net/projects/pthreads4w/files/pthreads4w-code-v3.0.0
+ triton;https://github.com/triton-inference-server/server/archive/refs/tags/v2.28.0.zip;4b305570aa1e889946e20e36050b6770e4108fee
+ # above are deps introduced by triton client, might remove after 1.14 release
+ extensions;https://github.com/microsoft/onnxruntime-extensions/archive/94142d8391c9791ec71c38336436319a2d4ac7a0.zip;4365ac5140338b4cb75a39944a4be276e3829b3c
+-curl;https://github.com/curl/curl/archive/refs/tags/curl-8_0_1.zip;b16d1fa8ee567b52c09a0f89940b07d8491b881d
+\ No newline at end of file
++curl;https://github.com/curl/curl/archive/refs/tags/curl-8_0_1.zip;b16d1fa8ee567b52c09a0f89940b07d8491b881d
+diff --git a/onnxruntime/core/flatbuffers/schema/ort.fbs.h b/onnxruntime/core/flatbuffers/schema/ort.fbs.h
+index 827970c70e..6b39276ef8 100644
+--- a/onnxruntime/core/flatbuffers/schema/ort.fbs.h
++++ b/onnxruntime/core/flatbuffers/schema/ort.fbs.h
+@@ -550,8 +550,8 @@ struct DimensionValue FLATBUFFERS_FINAL_CLASS : private flatbuffers::Table {
+   }
+   bool Verify(flatbuffers::Verifier &verifier) const {
+     return VerifyTableStart(verifier) &&
+-           VerifyField<int8_t>(verifier, VT_DIM_TYPE) &&
+-           VerifyField<int64_t>(verifier, VT_DIM_VALUE) &&
++           VerifyField<int8_t>(verifier, VT_DIM_TYPE, sizeof(int8_t)) &&
++           VerifyField<int64_t>(verifier, VT_DIM_VALUE, sizeof(int64_t)) &&
+            VerifyOffset(verifier, VT_DIM_PARAM) &&
+            verifier.VerifyString(dim_param()) &&
+            verifier.EndTable();
+@@ -622,7 +622,7 @@ struct TensorTypeAndShape FLATBUFFERS_FINAL_CLASS : private flatbuffers::Table {
+   }
+   bool Verify(flatbuffers::Verifier &verifier) const {
+     return VerifyTableStart(verifier) &&
+-           VerifyField<int32_t>(verifier, VT_ELEM_TYPE) &&
++           VerifyField<int32_t>(verifier, VT_ELEM_TYPE, sizeof(int32_t)) &&
+            VerifyOffset(verifier, VT_SHAPE) &&
+            verifier.VerifyTable(shape()) &&
+            verifier.EndTable();
+@@ -675,7 +675,7 @@ struct MapType FLATBUFFERS_FINAL_CLASS : private flatbuffers::Table {
+   }
+   bool Verify(flatbuffers::Verifier &verifier) const {
+     return VerifyTableStart(verifier) &&
+-           VerifyField<int32_t>(verifier, VT_KEY_TYPE) &&
++           VerifyField<int32_t>(verifier, VT_KEY_TYPE, sizeof(int32_t)) &&
+            VerifyOffset(verifier, VT_VALUE_TYPE) &&
+            verifier.VerifyTable(value_type()) &&
+            verifier.EndTable();
+@@ -775,7 +775,7 @@ struct NodeEdge FLATBUFFERS_FINAL_CLASS : private flatbuffers::Table {
+   }
+   bool Verify(flatbuffers::Verifier &verifier) const {
+     return VerifyTableStart(verifier) &&
+-           VerifyField<uint32_t>(verifier, VT_NODE_INDEX) &&
++           VerifyField<uint32_t>(verifier, VT_NODE_INDEX, sizeof(uint32_t)) &&
+            VerifyOffset(verifier, VT_INPUT_EDGES) &&
+            verifier.VerifyVector(input_edges()) &&
+            VerifyOffset(verifier, VT_OUTPUT_EDGES) &&
+@@ -899,11 +899,11 @@ struct Node FLATBUFFERS_FINAL_CLASS : private flatbuffers::Table {
+            verifier.VerifyString(doc_string()) &&
+            VerifyOffset(verifier, VT_DOMAIN) &&
+            verifier.VerifyString(domain()) &&
+-           VerifyField<int32_t>(verifier, VT_SINCE_VERSION) &&
+-           VerifyField<uint32_t>(verifier, VT_INDEX) &&
++           VerifyField<int32_t>(verifier, VT_SINCE_VERSION, sizeof(int32_t)) &&
++           VerifyField<uint32_t>(verifier, VT_INDEX, sizeof(uint32_t)) &&
+            VerifyOffset(verifier, VT_OP_TYPE) &&
+            verifier.VerifyString(op_type()) &&
+-           VerifyField<int32_t>(verifier, VT_TYPE) &&
++           VerifyField<int32_t>(verifier, VT_TYPE, sizeof(int32_t)) &&
+            VerifyOffset(verifier, VT_EXECUTION_PROVIDER_TYPE) &&
+            verifier.VerifyString(execution_provider_type()) &&
+            VerifyOffset(verifier, VT_INPUTS) &&
+@@ -1162,7 +1162,7 @@ struct TypeInfo FLATBUFFERS_FINAL_CLASS : private flatbuffers::Table {
+     return VerifyTableStart(verifier) &&
+            VerifyOffset(verifier, VT_DENOTATION) &&
+            verifier.VerifyString(denotation()) &&
+-           VerifyField<uint8_t>(verifier, VT_VALUE_TYPE) &&
++           VerifyField<uint8_t>(verifier, VT_VALUE_TYPE, sizeof(uint8_t)) &&
+            VerifyOffset(verifier, VT_VALUE) &&
+            VerifyTypeInfoValue(verifier, value(), value_type()) &&
+            verifier.EndTable();
+@@ -1247,7 +1247,7 @@ struct OperatorSetId FLATBUFFERS_FINAL_CLASS : private flatbuffers::Table {
+     return VerifyTableStart(verifier) &&
+            VerifyOffset(verifier, VT_DOMAIN) &&
+            verifier.VerifyString(domain()) &&
+-           VerifyField<int64_t>(verifier, VT_VERSION) &&
++           VerifyField<int64_t>(verifier, VT_VERSION, sizeof(int64_t)) &&
+            verifier.EndTable();
+   }
+ };
+@@ -1331,7 +1331,7 @@ struct Tensor FLATBUFFERS_FINAL_CLASS : private flatbuffers::Table {
+            verifier.VerifyString(doc_string()) &&
+            VerifyOffset(verifier, VT_DIMS) &&
+            verifier.VerifyVector(dims()) &&
+-           VerifyField<int32_t>(verifier, VT_DATA_TYPE) &&
++           VerifyField<int32_t>(verifier, VT_DATA_TYPE, sizeof(int32_t)) &&
+            VerifyOffset(verifier, VT_RAW_DATA) &&
+            verifier.VerifyVector(raw_data()) &&
+            VerifyOffset(verifier, VT_STRING_DATA) &&
+@@ -1556,9 +1556,9 @@ struct Attribute FLATBUFFERS_FINAL_CLASS : private flatbuffers::Table {
+            verifier.VerifyString(name()) &&
+            VerifyOffset(verifier, VT_DOC_STRING) &&
+            verifier.VerifyString(doc_string()) &&
+-           VerifyField<int32_t>(verifier, VT_TYPE) &&
+-           VerifyField<float>(verifier, VT_F) &&
+-           VerifyField<int64_t>(verifier, VT_I) &&
++           VerifyField<int32_t>(verifier, VT_TYPE, sizeof(int32_t)) &&
++           VerifyField<float>(verifier, VT_F, sizeof(float)) &&
++           VerifyField<int64_t>(verifier, VT_I, sizeof(int64_t)) &&
+            VerifyOffset(verifier, VT_S) &&
+            verifier.VerifyString(s()) &&
+            VerifyOffset(verifier, VT_T) &&
+@@ -1747,12 +1747,12 @@ struct NodesToOptimizeIndices FLATBUFFERS_FINAL_CLASS : private flatbuffers::Tab
+     return VerifyTableStart(verifier) &&
+            VerifyOffset(verifier, VT_NODE_INDICES) &&
+            verifier.VerifyVector(node_indices()) &&
+-           VerifyField<uint32_t>(verifier, VT_NUM_INPUTS) &&
+-           VerifyField<uint32_t>(verifier, VT_NUM_OUTPUTS) &&
+-           VerifyField<uint8_t>(verifier, VT_HAS_VARIADIC_INPUT) &&
+-           VerifyField<uint8_t>(verifier, VT_HAS_VARIADIC_OUTPUT) &&
+-           VerifyField<uint32_t>(verifier, VT_NUM_VARIADIC_INPUTS) &&
+-           VerifyField<uint32_t>(verifier, VT_NUM_VARIADIC_OUTPUTS) &&
++           VerifyField<uint32_t>(verifier, VT_NUM_INPUTS, sizeof(uint32_t)) &&
++           VerifyField<uint32_t>(verifier, VT_NUM_OUTPUTS, sizeof(uint32_t)) &&
++           VerifyField<uint8_t>(verifier, VT_HAS_VARIADIC_INPUT, sizeof(uint8_t)) &&
++           VerifyField<uint8_t>(verifier, VT_HAS_VARIADIC_OUTPUT, sizeof(uint8_t)) &&
++           VerifyField<uint32_t>(verifier, VT_NUM_VARIADIC_INPUTS, sizeof(uint32_t)) &&
++           VerifyField<uint32_t>(verifier, VT_NUM_VARIADIC_OUTPUTS, sizeof(uint32_t)) &&
+            verifier.EndTable();
+   }
+ };
+@@ -1850,8 +1850,8 @@ struct DeprecatedNodeIndexAndKernelDefHash FLATBUFFERS_FINAL_CLASS : private fla
+   }
+   bool Verify(flatbuffers::Verifier &verifier) const {
+     return VerifyTableStart(verifier) &&
+-           VerifyField<uint32_t>(verifier, VT_NODE_INDEX) &&
+-           VerifyField<uint64_t>(verifier, VT_KERNEL_DEF_HASH) &&
++           VerifyField<uint32_t>(verifier, VT_NODE_INDEX, sizeof(uint32_t)) &&
++           VerifyField<uint64_t>(verifier, VT_KERNEL_DEF_HASH, sizeof(uint64_t)) &&
+            verifier.EndTable();
+   }
+ };
+@@ -2149,7 +2149,7 @@ struct Graph FLATBUFFERS_FINAL_CLASS : private flatbuffers::Table {
+            VerifyOffset(verifier, VT_NODES) &&
+            verifier.VerifyVector(nodes()) &&
+            verifier.VerifyVectorOfTables(nodes()) &&
+-           VerifyField<uint32_t>(verifier, VT_MAX_NODE_INDEX) &&
++           VerifyField<uint32_t>(verifier, VT_MAX_NODE_INDEX, sizeof(uint32_t)) &&
+            VerifyOffset(verifier, VT_NODE_EDGES) &&
+            verifier.VerifyVector(node_edges()) &&
+            verifier.VerifyVectorOfTables(node_edges()) &&
+@@ -2378,7 +2378,7 @@ struct Model FLATBUFFERS_FINAL_CLASS : private flatbuffers::Table {
+   }
+   bool Verify(flatbuffers::Verifier &verifier) const {
+     return VerifyTableStart(verifier) &&
+-           VerifyField<int64_t>(verifier, VT_IR_VERSION) &&
++           VerifyField<int64_t>(verifier, VT_IR_VERSION, sizeof(int64_t)) &&
+            VerifyOffset(verifier, VT_OPSET_IMPORT) &&
+            verifier.VerifyVector(opset_import()) &&
+            verifier.VerifyVectorOfTables(opset_import()) &&
+@@ -2388,7 +2388,7 @@ struct Model FLATBUFFERS_FINAL_CLASS : private flatbuffers::Table {
+            verifier.VerifyString(producer_version()) &&
+            VerifyOffset(verifier, VT_DOMAIN) &&
+            verifier.VerifyString(domain()) &&
+-           VerifyField<int64_t>(verifier, VT_MODEL_VERSION) &&
++           VerifyField<int64_t>(verifier, VT_MODEL_VERSION, sizeof(int64_t)) &&
+            VerifyOffset(verifier, VT_DOC_STRING) &&
+            verifier.VerifyString(doc_string()) &&
+            VerifyOffset(verifier, VT_GRAPH) &&
+@@ -2728,8 +2728,8 @@ struct ArgTypeAndIndex FLATBUFFERS_FINAL_CLASS : private flatbuffers::Table {
+   }
+   bool Verify(flatbuffers::Verifier &verifier) const {
+     return VerifyTableStart(verifier) &&
+-           VerifyField<int8_t>(verifier, VT_ARG_TYPE) &&
+-           VerifyField<uint32_t>(verifier, VT_INDEX) &&
++           VerifyField<int8_t>(verifier, VT_ARG_TYPE, sizeof(int8_t)) &&
++           VerifyField<uint32_t>(verifier, VT_INDEX, sizeof(uint32_t)) &&
+            verifier.EndTable();
+   }
+ };
+-- 
+2.40.1
+
