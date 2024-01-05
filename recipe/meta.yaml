@@ -14,6 +14,9 @@ source:
       - 0001-Fix-for-NVCC-error.patch                                #[build_type=='cuda']
       - 0001-Updated-protobuf-to-3.21.patch
       - 0001-Fix-shared-lib-re2-not-found.patch
+      - 0001-Fix-cuda-11.2-builds.patch
+      - 0001-Fixed-onnxruntime-for-flatbuffers.patch
+      - 0001-Pin-numpy-to-open-ce-s-version.patch
 
 build:
   number: 1
