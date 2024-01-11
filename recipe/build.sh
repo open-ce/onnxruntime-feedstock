@@ -93,6 +93,9 @@ else
     LTO="--enable_lto"
 fi
 
+#update flatbuffers schema
+python onnxruntime/core/flatbuffers/schema/compile_schema.py --flatc $PREFIX/bin/flatc
+
 python tools/ci_build/build.py \
     $LTO \
     --build_dir build-ci \
