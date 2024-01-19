@@ -1,6 +1,6 @@
-From b06277bdb942d2315d46b407a00b4801d5887c7b Mon Sep 17 00:00:00 2001
-From: Nishidha Panpaliya <npanpa23@in.ibm.com>
-Date: Mon, 15 Nov 2021 09:29:06 -0500
+From ec8534746d8eca67de30114156774e0d55c4d275 Mon Sep 17 00:00:00 2001
+From: Deepali Chourasia <deepch23@in.ibm.com>
+Date: Wed, 27 Dec 2023 11:58:23 +0000
 Subject: [PATCH] Fix for tests failures with cuda build type
 
 ---
@@ -8,28 +8,28 @@ Subject: [PATCH] Fix for tests failures with cuda build type
  1 file changed, 4 insertions(+), 1 deletion(-)
 
 diff --git a/cmake/onnxruntime_unittests.cmake b/cmake/onnxruntime_unittests.cmake
-index 7cd6aac8a..0c154eaed 100644
+index 695e218441..ce01e7d802 100644
 --- a/cmake/onnxruntime_unittests.cmake
 +++ b/cmake/onnxruntime_unittests.cmake
-@@ -964,6 +964,9 @@ if (NOT onnxruntime_ENABLE_TRAINING_TORCH_INTEROP)
-             onnxruntime onnxruntime_flatbuffers  onnx_test_data_proto
+@@ -1195,6 +1195,9 @@ if (NOT onnxruntime_ENABLE_TRAINING_TORCH_INTEROP)
+             onnxruntime onnxruntime_flatbuffers onnx_test_data_proto
              ${onnxruntime_EXTERNAL_LIBRARIES}
              ${GETOPT_LIB_WIDE} ${SYS_PATH_LIB} ${CMAKE_DL_LIBS})
 +    if (onnxruntime_USE_CUDA)
 +      list(APPEND onnxruntime_perf_test_libs onnxruntime_test_cuda_ops_lib cudart cudnn cufft cublas)
-+    endif()    
++    endif()
      if(NOT WIN32)
-       list(APPEND onnxruntime_perf_test_libs nsync_cpp)
-     endif()
-@@ -1008,7 +1011,7 @@ if (NOT onnxruntime_ENABLE_TRAINING_TORCH_INTEROP)
-       list(APPEND onnxruntime_shared_lib_test_LIBS nsync_cpp)
+       list(APPEND onnxruntime_perf_test_libs nsync::nsync_cpp)
+       if(onnxruntime_USE_SNPE)
+@@ -1246,7 +1249,7 @@ if (NOT onnxruntime_ENABLE_TRAINING_TORCH_INTEROP)
+       endif()
      endif()
      if (onnxruntime_USE_CUDA)
 -      list(APPEND onnxruntime_shared_lib_test_LIBS onnxruntime_test_cuda_ops_lib cudart)
 +      list(APPEND onnxruntime_shared_lib_test_LIBS onnxruntime_test_cuda_ops_lib cudart cudnn cufft cublas)
      endif()
-     if (CMAKE_SYSTEM_NAME STREQUAL "Android")
-       list(APPEND onnxruntime_shared_lib_test_LIBS ${android_shared_libs})
+     if (onnxruntime_USE_TENSORRT)
+       list(APPEND onnxruntime_shared_lib_test_LIBS ${TENSORRT_LIBRARY_INFER})
 -- 
-2.32.0
+2.40.1
 
