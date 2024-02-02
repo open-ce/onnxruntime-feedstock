@@ -88,7 +88,7 @@ fi
 if [[ $ppc_arch == "p10" ]]
 then
     # Removing these libs so that libonnxruntime.so links against libstdc++.so present on
-    # the system provided by gcc-toolset-11
+    # the system provided by gcc-toolset-12
     rm ${PREFIX}/lib/libstdc++.so*
     rm ${BUILD_PREFIX}/lib/libstdc++.so*
     LTO=""
