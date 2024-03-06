@@ -1,0 +1,44 @@
+From 3c59500db10994116df5bf53d4dcc6e7ccb9989f Mon Sep 17 00:00:00 2001
+From: Deepali Chourasia <deepch23@in.ibm.com>
+Date: Mon, 4 Mar 2024 15:08:30 +0000
+Subject: [PATCH] Eigen patch to disable MMA
+
+update
+---
+ cmake/external/eigen.cmake                            |  1 +
+ ...01-patch-to-define-EIGEN_ALTIVEC_DISABLE_MMA.patch | 11 +++++++++++
+ 2 files changed, 12 insertions(+)
+ create mode 100644 cmake/patches/eigen/0001-patch-to-define-EIGEN_ALTIVEC_DISABLE_MMA.patch
+
+diff --git a/cmake/external/eigen.cmake b/cmake/external/eigen.cmake
+index c0f7ddc50e..2f798531f0 100644
+--- a/cmake/external/eigen.cmake
++++ b/cmake/external/eigen.cmake
+@@ -16,6 +16,7 @@ else ()
+             eigen
+             URL ${DEP_URL_eigen}
+             URL_HASH SHA1=${DEP_SHA1_eigen}
++            PATCH_COMMAND ${Patch_EXECUTABLE} -p1 --ignore-whitespace < ${PROJECT_SOURCE_DIR}/patches/eigen/0001-patch-to-define-EIGEN_ALTIVEC_DISABLE_MMA.patch
+         )
+     endif()
+     FetchContent_Populate(eigen)
+diff --git a/cmake/patches/eigen/0001-patch-to-define-EIGEN_ALTIVEC_DISABLE_MMA.patch b/cmake/patches/eigen/0001-patch-to-define-EIGEN_ALTIVEC_DISABLE_MMA.patch
+new file mode 100644
+index 0000000000..454ec19572
+--- /dev/null
++++ b/cmake/patches/eigen/0001-patch-to-define-EIGEN_ALTIVEC_DISABLE_MMA.patch
+@@ -0,0 +1,11 @@
++--- ./Eigen/src/Core/arch/AltiVec/MatrixProduct.h	2024-03-04 14:58:57.571332979 +0000
+++++ ./Eigen/src/Core/arch/AltiVec/MatrixProduct.h	2024-03-04 14:59:11.640797615 +0000
++@@ -28,6 +28,8 @@
++ #endif
++ #endif
++ 
+++#define EIGEN_ALTIVEC_DISABLE_MMA
+++
++ #ifdef __has_builtin
++ #if __has_builtin(__builtin_mma_assemble_acc)
++   #define ALTIVEC_MMA_SUPPORT
+-- 
+2.40.1
+
