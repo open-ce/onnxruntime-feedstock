@@ -19,7 +19,7 @@ source:
       - 0001-Eigen-patch-to-disable-MMA.patch                        #[ppc_arch != "p10"]
 
 build:
-  number: 2
+  number: 3
   string: h{{ PKG_HASH }}_{{ build_type }}_py{{ python | replace(".", "") }}_pb{{ protobuf | replace(".*", "")}}_{{ PKG_BUILDNUM }}   #[build_type == 'cpu']
   string: h{{ PKG_HASH }}_{{ build_type }}{{ cudatoolkit | replace(".*", "") }}_py{{ python | replace(".", "") }}_pb{{ protobuf | replace(".*", "")}}_{{ PKG_BUILDNUM }} #[build_type == 'cuda']
   script_env:
@@ -34,6 +34,7 @@ requirements:
     - boost_mp11 {{ boost_mp11 }}
     - gmock {{ gmock }}
     - gtest {{ gmock }}
+    - libabseil {{ abseil_cpp }}
     - optional-lite {{ optional_lite }}
     - nlohmann_json {{ nlohmann_json }}
     - safeint {{ safeint }}
@@ -56,6 +57,7 @@ requirements:
     - re2
     - nsync
     - libprotobuf {{ libprotobuf }}
+    - libabseil {{ abseil_cpp }}
     - protobuf {{ protobuf }}
     # We need to statically link protobuf until we link against a system libonnx
     # See: https://github.com/conda-forge/onnxruntime-feedstock/issues/5
