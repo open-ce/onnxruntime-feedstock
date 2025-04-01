@@ -34,6 +34,7 @@ requirements:
     - boost_mp11 {{ boost_mp11 }}
     - gmock {{ gmock }}
     - gtest {{ gmock }}
+    - libabseil {{ abseil_cpp }}
     - optional-lite {{ optional_lite }}
     - nlohmann_json {{ nlohmann_json }}
     - safeint {{ safeint }}
@@ -56,6 +57,7 @@ requirements:
     - re2
     - nsync
     - libprotobuf {{ libprotobuf }}
+    - libabseil {{ abseil_cpp }}
     - protobuf {{ protobuf }}
     # We need to statically link protobuf until we link against a system libonnx
     # See: https://github.com/conda-forge/onnxruntime-feedstock/issues/5
