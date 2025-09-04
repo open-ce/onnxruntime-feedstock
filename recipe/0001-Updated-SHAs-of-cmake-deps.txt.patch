@@ -1,0 +1,149 @@
+From ed5f25b6bf816e54d192eaaa8d7b21851fa50897 Mon Sep 17 00:00:00 2001
+From: Aman Surkar <Aman.Surkar@ibm.com>
+Date: Thu, 4 Sep 2025 13:48:49 +0000
+Subject: [PATCH] Updated SHAs of cmake/deps.txt
+
+---
+ 0001-Update-eigen-SHA.patch                   | 32 +++++++++++++++++++
+ cmake/deps.txt                                | 11 +++----
+ .../external/onnxruntime_external_deps.cmake  | 10 +++---
+ cmake/patches/protobuf/protobuf_cmake.patch   | 31 ------------------
+ 4 files changed, 42 insertions(+), 42 deletions(-)
+ create mode 100644 0001-Update-eigen-SHA.patch
+ delete mode 100644 cmake/patches/protobuf/protobuf_cmake.patch
+
+diff --git a/0001-Update-eigen-SHA.patch b/0001-Update-eigen-SHA.patch
+new file mode 100644
+index 0000000000..a245870c69
+--- /dev/null
++++ b/0001-Update-eigen-SHA.patch
+@@ -0,0 +1,32 @@
++From 97edfb011a09c15c7b33868512b843a231317252 Mon Sep 17 00:00:00 2001
++From: Aman Surkar <Aman.Surkar@ibm.com>
++Date: Thu, 4 Sep 2025 11:53:57 +0000
++Subject: [PATCH] Update eigen SHA
++
++---
++ cmake/deps.txt | 4 ++--
++ 1 file changed, 2 insertions(+), 2 deletions(-)
++
++diff --git a/cmake/deps.txt b/cmake/deps.txt
++index 2965c60277..f6936807a0 100644
++--- a/cmake/deps.txt
+++++ b/cmake/deps.txt
++@@ -11,7 +11,7 @@ abseil_cpp;https://github.com/abseil/abseil-cpp/archive/refs/tags/20220623.1.zip
++ cxxopts;https://github.com/jarro2783/cxxopts/archive/3c73d91c0b04e2b59462f0a741be8c07024c1bc0.zip;6c6ca7f8480b26c8d00476e0e24b7184717fe4f0
++ date;https://github.com/HowardHinnant/date/archive/refs/tags/v2.4.1.zip;ea99f021262b1d804a872735c658860a6a13cc98
++ dlpack;https://github.com/dmlc/dlpack/archive/refs/tags/v0.6.zip;4d565dd2e5b31321e5549591d78aa7f377173445
++-eigen;https://gitlab.com/libeigen/eigen/-/archive/e7248b26a1ed53fa030c5c459f7ea095dfd276ac/eigen-e7248b26a1ed53fa030c5c459f7ea095dfd276ac.zip;be8be39fdbc6e60e94fa7870b280707069b5b81a
+++eigen;https://gitlab.com/libeigen/eigen/-/archive/e7248b26a1ed53fa030c5c459f7ea095dfd276ac/eigen-e7248b26a1ed53fa030c5c459f7ea095dfd276ac.zip;32b145f525a8308d7ab1c09388b2e288312d8eba
++ flatbuffers;https://github.com/google/flatbuffers/archive/refs/tags/v1.12.0.zip;ba0a75fd12dbef8f6557a74e611b7a3d0c5fe7bf
++ fp16;https://github.com/Maratyszcza/FP16/archive/0a92994d729ff76a58f692d3028ca1b64b145d91.zip;b985f6985a05a1c03ff1bb71190f66d8f98a1494
++ fxdiv;https://github.com/Maratyszcza/FXdiv/archive/63058eff77e11aa15bf531df5dd34395ec3017c8.zip;a5658f4036402dbca7cebee32be57fb8149811e1
++@@ -42,4 +42,4 @@ re2;https://github.com/google/re2/archive/refs/tags/2022-06-01.zip;aa77313b76e91
++ safeint;https://github.com/dcleblanc/SafeInt/archive/ff15c6ada150a5018c5ef2172401cb4529eac9c0.zip;913a4046e5274d329af2806cb53194f617d8c0ab
++ tensorboard;https://github.com/tensorflow/tensorboard/archive/373eb09e4c5d2b3cc2493f0949dc4be6b6a45e81.zip;67b833913605a4f3f499894ab11528a702c2b381
++ cutlass;https://github.com/NVIDIA/cutlass/archive/refs/tags/v3.0.0.zip;0f95b3c1fc1bd1175c4a90b2c9e39074d1bccefd
++-extensions;https://github.com/microsoft/onnxruntime-extensions/archive/94142d8391c9791ec71c38336436319a2d4ac7a0.zip;4365ac5140338b4cb75a39944a4be276e3829b3c
++\ No newline at end of file
+++extensions;https://github.com/microsoft/onnxruntime-extensions/archive/94142d8391c9791ec71c38336436319a2d4ac7a0.zip;4365ac5140338b4cb75a39944a4be276e3829b3c
++-- 
++2.40.1
++
+diff --git a/cmake/deps.txt b/cmake/deps.txt
+index 2965c60277..441e176eb7 100644
+--- a/cmake/deps.txt
++++ b/cmake/deps.txt
+@@ -11,9 +11,8 @@ abseil_cpp;https://github.com/abseil/abseil-cpp/archive/refs/tags/20220623.1.zip
+ cxxopts;https://github.com/jarro2783/cxxopts/archive/3c73d91c0b04e2b59462f0a741be8c07024c1bc0.zip;6c6ca7f8480b26c8d00476e0e24b7184717fe4f0
+ date;https://github.com/HowardHinnant/date/archive/refs/tags/v2.4.1.zip;ea99f021262b1d804a872735c658860a6a13cc98
+ dlpack;https://github.com/dmlc/dlpack/archive/refs/tags/v0.6.zip;4d565dd2e5b31321e5549591d78aa7f377173445
+-eigen;https://gitlab.com/libeigen/eigen/-/archive/e7248b26a1ed53fa030c5c459f7ea095dfd276ac/eigen-e7248b26a1ed53fa030c5c459f7ea095dfd276ac.zip;be8be39fdbc6e60e94fa7870b280707069b5b81a
+-flatbuffers;https://github.com/google/flatbuffers/archive/refs/tags/v1.12.0.zip;ba0a75fd12dbef8f6557a74e611b7a3d0c5fe7bf
+-fp16;https://github.com/Maratyszcza/FP16/archive/0a92994d729ff76a58f692d3028ca1b64b145d91.zip;b985f6985a05a1c03ff1bb71190f66d8f98a1494
++eigen;https://gitlab.com/libeigen/eigen/-/archive/e7248b26a1ed53fa030c5c459f7ea095dfd276ac/eigen-e7248b26a1ed53fa030c5c459f7ea095dfd276ac.zip;32b145f525a8308d7ab1c09388b2e288312d8eba
++flatbuffers;https://github.com/google/flatbuffers/archive/refs/tags/v23.1.21.zip;f466352d07f90936a3494b59f479346dc5de7706;https://github.com/Maratyszcza/FP16/archive/0a92994d729ff76a58f692d3028ca1b64b145d91.zip;b985f6985a05a1c03ff1bb71190f66d8f98a1494
+ fxdiv;https://github.com/Maratyszcza/FXdiv/archive/63058eff77e11aa15bf531df5dd34395ec3017c8.zip;a5658f4036402dbca7cebee32be57fb8149811e1
+ google_benchmark;https://github.com/google/benchmark/archive/refs/tags/v1.7.0.zip;e97c368b176e8614e3f1bf13dd9abcf6a7ad9908
+ google_nsync;https://github.com/google/nsync/archive/refs/tags/1.23.0.zip;f3233450cf7156fc0bedd1b0e884eddec264897c
+@@ -27,10 +26,10 @@ mp11;https://github.com/boostorg/mp11/archive/refs/tags/boost-1.79.0.zip;c8f04e3
+ onnx;https://github.com/onnx/onnx/archive/e2525550194ce3d8a2c4a3af451c9d9b3ae6650e.zip;782f23d788185887f520a90535513e244218e928
+ #use the commit of supporting all the plugins and TRT 8.6-GA (https://github.com/onnx/onnx-tensorrt/commit/0462dc31ae78f48744b6141ae376df1f96d3f459)
+ onnx_tensorrt;https://github.com/onnx/onnx-tensorrt/archive/0462dc31ae78f48744b6141ae376df1f96d3f459.zip;5ff086361956cceb81ed17453a1fd8db2aa4328d
+-protobuf;https://github.com/protocolbuffers/protobuf/archive/refs/tags/v21.12.zip;7cf2733949036c7d52fda017badcab093fe73bfa
++protobuf;https://github.com/protocolbuffers/protobuf/archive/refs/tags/v3.21.12.zip;5f0ea65887f2a0547087a01c0d23f43dba17a523
+ protoc_win64;https://github.com/protocolbuffers/protobuf/releases/download/v21.12/protoc-21.12-win64.zip;b4521f7ada5b260380f94c4bd7f1b7684c76969a
+ protoc_win32;https://github.com/protocolbuffers/protobuf/releases/download/v21.12/protoc-21.12-win32.zip;3688010318192c46ce73213cdfb6b3e5656da874
+-protoc_linux_x64;https://github.com/protocolbuffers/protobuf/releases/download/v21.12/protoc-21.12-linux-x86_64.zip;338462004aa5be9fba45b35b5b4be43f69b47a90
++protoc_linux_x64;https://github.com/protocolbuffers/protobuf/releases/download/v3.21.12/protoc-3.21.12-linux-x86_64.zip;0019dfc4b32d63c1392aa264aed2253c1e0c2fb09216f8e2cc269bbfb8bb49b5
+ protoc_linux_x86;https://github.com/protocolbuffers/protobuf/releases/download/v21.12/protoc-21.12-linux-x86_32.zip;61fdbe7d6360e065ec6fea23bca2cca673115fb8
+ protoc_linux_aarch64;https://github.com/protocolbuffers/protobuf/releases/download/v21.12/protoc-21.12-linux-aarch_64.zip;df9d45470b0b8cf939dd2f0ec6b88e9cafc4d617
+ protoc_mac_universal;https://github.com/protocolbuffers/protobuf/releases/download/v21.12/protoc-21.12-osx-universal_binary.zip;23710c3d1c2036d8d65a6a22234372fa2d7af9ef
+@@ -42,4 +41,4 @@ re2;https://github.com/google/re2/archive/refs/tags/2022-06-01.zip;aa77313b76e91
+ safeint;https://github.com/dcleblanc/SafeInt/archive/ff15c6ada150a5018c5ef2172401cb4529eac9c0.zip;913a4046e5274d329af2806cb53194f617d8c0ab
+ tensorboard;https://github.com/tensorflow/tensorboard/archive/373eb09e4c5d2b3cc2493f0949dc4be6b6a45e81.zip;67b833913605a4f3f499894ab11528a702c2b381
+ cutlass;https://github.com/NVIDIA/cutlass/archive/refs/tags/v3.0.0.zip;0f95b3c1fc1bd1175c4a90b2c9e39074d1bccefd
+-extensions;https://github.com/microsoft/onnxruntime-extensions/archive/94142d8391c9791ec71c38336436319a2d4ac7a0.zip;4365ac5140338b4cb75a39944a4be276e3829b3c
+\ No newline at end of file
++extensions;https://github.com/microsoft/onnxruntime-extensions/archive/94142d8391c9791ec71c38336436319a2d4ac7a0.zip;4365ac5140338b4cb75a39944a4be276e3829b3c
+diff --git a/cmake/external/onnxruntime_external_deps.cmake b/cmake/external/onnxruntime_external_deps.cmake
+index 8e412c7847..cd9b1fff22 100644
+--- a/cmake/external/onnxruntime_external_deps.cmake
++++ b/cmake/external/onnxruntime_external_deps.cmake
+@@ -156,11 +156,11 @@ endif()
+ #1. if ONNX_CUSTOM_PROTOC_EXECUTABLE is set, build Protobuf from source, except protoc.exe. This mode is mainly
+ #   for cross-compiling
+ #2. if ONNX_CUSTOM_PROTOC_EXECUTABLE is not set, Compile everything(including protoc) from source code.
+-if(Patch_FOUND)
+-  set(ONNXRUNTIME_PROTOBUF_PATCH_COMMAND ${Patch_EXECUTABLE} --binary --ignore-whitespace -p1 < ${PROJECT_SOURCE_DIR}/patches/protobuf/protobuf_cmake.patch)
+-else()
+- set(ONNXRUNTIME_PROTOBUF_PATCH_COMMAND "")
+-endif()
++#if(Patch_FOUND)
++#  set(ONNXRUNTIME_PROTOBUF_PATCH_COMMAND ${Patch_EXECUTABLE} --binary --ignore-whitespace -p1 < ${PROJECT_SOURCE_DIR}/patches/protobuf/protobuf_cmake.patch)
++#else()
++# set(ONNXRUNTIME_PROTOBUF_PATCH_COMMAND "")
++#endif()
+ FetchContent_Declare(
+   Protobuf
+   URL ${DEP_URL_protobuf}
+diff --git a/cmake/patches/protobuf/protobuf_cmake.patch b/cmake/patches/protobuf/protobuf_cmake.patch
+deleted file mode 100644
+index fe8bd25ab1..0000000000
+--- a/cmake/patches/protobuf/protobuf_cmake.patch
++++ /dev/null
+@@ -1,31 +0,0 @@
+-diff --git a/CMakeLists.txt b/CMakeLists.txt
+-index 04cb3303a..4025805cf 100644
+---- a/CMakeLists.txt
+-+++ b/CMakeLists.txt
+-@@ -249,9 +249,7 @@ if (MSVC)
+-   # MSVC warning suppressions
+-   add_definitions(
+-     /wd4065 # switch statement contains 'default' but no 'case' labels
+--    /wd4244 # 'conversion' conversion from 'type1' to 'type2', possible loss of data
+-     /wd4251 # 'identifier' : class 'type' needs to have dll-interface to be used by clients of class 'type2'
+--    /wd4267 # 'var' : conversion from 'size_t' to 'type', possible loss of data
+-     /wd4305 # 'identifier' : truncation from 'type1' to 'type2'
+-     /wd4307 # 'operator' : integral constant overflow
+-     /wd4309 # 'conversion' : truncation of constant value
+-@@ -259,7 +257,6 @@ if (MSVC)
+-     /wd4355 # 'this' : used in base member initializer list
+-     /wd4506 # no definition for inline function 'function'
+-     /wd4800 # 'type' : forcing value to bool 'true' or 'false' (performance warning)
+--    /wd4996 # The compiler encountered a deprecated declaration.
+-   )
+-   # Allow big object
+-   add_definitions(/bigobj)
+-@@ -289,7 +286,7 @@ if (MSVC)
+- else (MSVC)
+-   # No version.rc file.
+-   set(protobuf_version_rc_file)
+--
+-+  set(CMAKE_CXX_FLAGS  "${CMAKE_CXX_FLAGS} -Wno-unused-parameter")
+-   # When building with "make", "lib" prefix will be added automatically by
+-   # the build tool.
+-   set(LIB_PREFIX)
+-- 
+2.40.1
+
